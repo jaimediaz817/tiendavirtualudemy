@@ -17,8 +17,10 @@ class CreateCategoriesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->text('description');
-            $table->bigInteger('created_at')->unsigned()->index();
-            $table->bigInteger('updated_at')->unsigned()->index();
+
+            $table->bigInteger('created_by')->unsigned()->index();
+            $table->bigInteger('updated_by')->unsigned()->index();
+
             $table->timestamps();
         });
     }

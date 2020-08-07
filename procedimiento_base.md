@@ -225,3 +225,15 @@ php artisan migrate
 # GIT COMANDOS
 ---------------------------------------------------------------------------
 
+git config --global user.name = "Jaime Diaz"
+git config --global user.email = "jaimeivan0017@gmail.com"
+git remote add origin https://jdiaz0017@bitbucket.org/jdiaz0017/laravelvue.git
+
+- Work directory
+- Index (area de ensao)
+- Head (apunta al ultimo commit realizado)
+
+git add -A
+git commit -m "Commit inicial del proyecto con todas las migraciones realizadas"
+
+Git pull origin master (si no hay diferencias todo estará actualizado)
