@@ -10,3 +10,16 @@
     transform: translateX(-10px);
     opacity: 0;
 }
+
+.btnWidth {
+    width: 49% !important;    
+}
+
+/* Element io SELECT STYLE */
+.el-select {
+    width: 100%;
+}
+
+.li-item-clearLi {
+    list-style: none;
+}

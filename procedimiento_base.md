@@ -237,3 +237,77 @@ git add -A
 git commit -m "Commit inicial del proyecto con todas las migraciones realizadas"
 
 Git pull origin master (si no hay diferencias todo estará actualizado)
+
+
+
+
+## MODULOS (ADMINISTRACION => USUARIOS)
+
+
+- element io: es un [COMPONENTE] que permite usar controles sofisticados en los formularios tradicionales:
+element io
+
+- instalación:
+[COMANDO]:
+npm i element-ui -S
+
+- Página:
+[PATH]:
+https://element.eleme.io/#/es/component/installation
+
+- Para limpiar lo seleccionado, escribirmos una propiedad en el componente:
+[PROPIEDAD]:
+clearable
+
+
+- Usamos la plantilla del componente en la vista:
+[SOURCE]:
+  <el-select v-model="value" placeholder="Select">
+    <el-option
+      v-for="item in options"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value">
+    </el-option>
+  </el-select>
+
+- Posteriormente después de configurar la petición get axios, creamos un controlador:
+
+## CREANDO CONTROLADOR (CONTROLADORES , CONTROLLER)
+
+php artisan make:controller Administracion\UsersController
+
+
+
+
+## DATOS DE PRUEBA ( FAKER )
+database/factories/UserFactory
+
+- Dentro del factory escribimos los tipos a generrar:
+
+[SOURCE]:
+    return [
+        'firstname' => $faker->firstname,
+        'secondname' => $faker->secondname,
+        'lastname' => $faker->lastname,
+        'username' => $faker->unique()->word,
+        'email'     => $faker->unique()->safeEmail,
+        'email_verified_at' => now(),
+        'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        'remember_token' => Str::random(10),
+        'created_by' => 1,
+        'updated_by' => 1
+    ];
+
+- Posteriormente ejecutamos el comando:
+[COMANDO]:
+    php artisan make:seed UsersTableSeeder
+
+- En el seeder generado, se escribe lo siguiente:
+[SOURCE]:
+    factory(User::class, 25)->create();
+
+- En databaseSeeder.php agregamos esta línea en el método run:
+[SOURCE]:
+    $this->call(UsersTableSeeder::class);
+

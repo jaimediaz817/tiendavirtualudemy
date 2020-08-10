@@ -88,7 +88,7 @@
     </li>
     <li class="nav-item">
         <router-link class="nav-link" :to="'/permiso'">
-            <i class="nav-icon fas fa-fa-key"></i>
+            <i class="nav-icon fas fa-key"></i>
             <p>Permisos</p>
         </router-link>
     </li>

@@ -24,7 +24,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->bigInteger('file_id')->unsigned()->nullable();
-            $table->bigInteger('creatd_by')->unsigned()->index();
+            $table->bigInteger('created_by')->unsigned()->index();
             $table->bigInteger('updated_by')->unsigned()->index();
             $table->enum('state', ['A', 'I'])->nullable()->default('A');
 
