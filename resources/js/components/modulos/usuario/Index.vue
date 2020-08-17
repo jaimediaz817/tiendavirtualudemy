@@ -14,7 +14,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="card-tools">
-                    <router-link class="btn btn-info btn-sm" :to="'/'">
+                    <router-link class="btn btn-info btn-sm" :to="'/usuario/crear'">
                         <i class="fas fa-plus-square"></i>
                         Nuevo Usuario
                     </router-link>
@@ -33,7 +33,7 @@
                                         <div class="form-group row">
                                             <label class="col-md-3 col-form-label">Nombre</label>
                                             <div class="col-md-9">
-                                                <input type="text" class="form-control" v-model="fillBusquedaUsuario.cNombre">
+                                                <input type="text" class="form-control" v-model="fillBusquedaUsuario.cNombre" @keyup.enter="getListarUsuarios">
                                             </div>
                                         </div>
                                     </div>
@@ -42,7 +42,7 @@
                                         <div class="form-group row">
                                             <label class="col-md-3 col-form-label">Usuario</label>
                                             <div class="col-md-9">
-                                                <input type="text" class="form-control" v-model="fillBusquedaUsuario.cUsuario">
+                                                <input type="text" class="form-control" v-model="fillBusquedaUsuario.cUsuario" @keyup.enter="getListarUsuarios">
                                             </div>
                                         </div>
                                     </div>
@@ -51,7 +51,7 @@
                                         <div class="form-group row">
                                             <label class="col-md-3 col-form-label">Correo Electrónico</label>
                                             <div class="col-md-9">
-                                                <input type="email" class="form-control" v-model="fillBusquedaUsuario.cCorreo">
+                                                <input type="email" class="form-control" v-model="fillBusquedaUsuario.cCorreo" @keyup.enter="getListarUsuarios">
                                             </div>
                                         </div>
                                     </div>
@@ -82,7 +82,11 @@
                         <div class="card-footer">
                             <div class="row">
                                 <div class="col-md-4 offset-4">
-                                    <button class="btn btn-flat btn-info btnWidth" @click.prevent="getListarUsuarios">Buscar</button>
+                                    <button 
+                                        class="btn btn-flat btn-info btnWidth" 
+                                        @click.prevent="getListarUsuarios"
+                                        v-loading.fullscreen.lock="fullscreenLoading"
+                                    >Buscar</button>
                                     <button class="btn btn-flat btn-default btnWidth" @click.prevent="limpiarCriteriosBusqueda">Limpiar</button>
                                 </div>
                             </div>
@@ -195,6 +199,7 @@ export default {
                 cCorreo  : '',
                 cEstado  : '',
             },
+            fullscreenLoading: false,
             listUsuarios: [],
             listEstados: [
                 {value: 'A', label: 'Activo'},
@@ -215,16 +220,20 @@ export default {
             // devolver en entero mayor
             return Math.ceil(a/b);
         },
+
         // Obtener registros paginados
         listarUsuariosPaginated() {
+            // PAGINA 1
             // 0 * 5= 0
             // 0 + 5 = 5
             // 0 - (5-1)
 
+            // PAGINA 2
             // 1 * 5 = 5
             // 5 + 5 = 10
             // 5 - (5-1)
 
+            // PAGINA 3
             // 2 * 5 = 10
             // 10 + 5 = 15
             // 10 - (15-1)
@@ -234,6 +243,7 @@ export default {
             console.log("inicio y fin: ", inicio, " , ", fin)
             return this.listUsuarios.slice(inicio, fin);
         },
+
         pagesList() {
             let a = this.listUsuarios.length,
                 b = this.perPage
@@ -266,7 +276,9 @@ export default {
         limpiarBandejaUsuarios() {
             this.listUsuarios = [];
         },
-        getListarUsuarios() {
+        getListarUsuarios() 
+        {
+            this.fullscreenLoading = true;
             var url = '/administracion/usuario/getListarUsuarios'
 
             axios.get(url, {
@@ -277,12 +289,18 @@ export default {
                     'cEstado'   :  this.fillBusquedaUsuario.cEstado,
                 }
             }).then( response => {
-                console.log(response.data);
+                this.inicializarPaginacion();
+                console.log(response.data);                
                 this.listUsuarios = response.data;
+                this.fullscreenLoading = false;
             }).catch(error => {
                 console.log("error::::")
                 console.log(error)
             })
+        },
+
+        inicializarPaginacion() {
+            this.pageNumber = 0;
         },
 
         // funcionalidad propia

@@ -17,7 +17,7 @@ class CreateFilesTable extends Migration
             $table->bigIncrements('id');
             $table->string('path');
             $table->string('filename');
-            $table->bigInteger('creatd_by')->unsigned()->index();
+            $table->bigInteger('created_by')->unsigned()->index();
             $table->bigInteger('updated_by')->unsigned()->index();
             $table->timestamps();
         });

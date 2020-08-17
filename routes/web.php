@@ -16,8 +16,16 @@ use Illuminate\Support\Facades\Route;
 /* 
 
 */
+
+// listar
+Route::get('/administracion/usuario/getListarUsuarios', 'Administracion\UsersController@getListarUsuarios');
+// guardar Archivo
+Route::post('/archivo/setRegistrarArchivo', 'FilesController@setRegistrarArchivo');
+// guardar Usuario
+Route::post('/administracion/usuario/setRegistrarUsuario', 'Administracion\UsersController@setRegistrarUsuario');
+
+// TODO: se cambia el orden de llamado a las rutas
 Route::get('/{optional?}', function () {
     return view('app');
-})->name('basepath');
-
-Route::get('/administracion/usuario/getListarUsuarios', 'Administracion\UsersController@getListarUsuarios');
+})->name('basepath')
+  ->where('optional', '.*');

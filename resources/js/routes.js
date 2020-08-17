@@ -11,9 +11,11 @@ export default new Router({
         { path: '/categoria', component: require('./components/modulos/categoria/Index').default },
         { path: '/producto', component: require('./components/modulos/producto/Index').default },
         { path: '/usuario', component: require('./components/modulos/usuario/Index').default },
+        { path: '/usuario/crear', component: require('./components/modulos/usuario/create').default },
         { path: '/rol', component: require('./components/modulos/rol/Index').default },
         { path: '/permiso', component: require('./components/modulos/permiso/Index').default },
         { path: '/reporte', component: require('./components/modulos/reporte/Index').default },
     ],
-    mode: 'history'
+    mode: 'history',
+    linkActiveClass: 'active'
 })

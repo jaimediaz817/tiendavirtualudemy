@@ -311,3 +311,19 @@ database/factories/UserFactory
 [SOURCE]:
     $this->call(UsersTableSeeder::class);
 
+- Escribimos el comando para ejecutar el Seed con los datos poblados:
+[COMANDO]:
+    php artisan db:seed
+
+
+
+
+
+- Crearemos un nuevo controlador una vez llevado a cabo el listado de usuarios y el registro del mismo:
+[COMANDO]:
+php artisan make:controller FilesController
+
+
+- Se procede a crear el enlace simbólico para el acceso a los archivos subidos:
+[COMANDO]:
+php artisan storage:link
