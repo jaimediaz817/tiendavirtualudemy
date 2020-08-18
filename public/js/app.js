@@ -4343,6 +4343,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -4433,6 +4439,7 @@ __webpack_require__.r(__webpack_exports__);
       var url = '/administracion/usuario/getListarUsuarios';
       axios.get(url, {
         params: {
+          'nIdUsuario': this.fillBusquedaUsuario.nIdUsuario,
           'cNombre': this.fillBusquedaUsuario.cNombre,
           'cUsuario': this.fillBusquedaUsuario.cUsuario,
           'cCorreo': this.fillBusquedaUsuario.cCorreo,
@@ -4447,6 +4454,41 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         console.log("error::::");
         console.log(error);
+      });
+    },
+    setCambiarEstadoUsuario: function setCambiarEstadoUsuario(estado, idUsuario) {
+      var _this2 = this;
+
+      // text: "You won't be able to revert this!",
+      Swal.fire({
+        title: '¿Está seguro de ' + (estado == 1 ? 'desactivar' : 'activar') + ' el usuario?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: estado == 1 ? 'Si, desactivar' : 'Si, activar',
+        cancelButtonText: 'Cancelar operación'
+      }).then(function (result) {
+        console.log("result :: ", result);
+
+        if (result.value) {
+          // TODO: petición al servidor 
+          _this2.fullscreenLoading = true;
+          var url = '/administracion/usuario/setCambiarEstadoUsuario';
+          axios.post(url, {
+            'nIdUsuario': idUsuario,
+            'cEstado': estado == 1 ? 'I' : 'A'
+          }).then(function (response) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Se ' + (estado == 1 ? 'desativo' : 'activo') + ' el usuario',
+              showConfirmButton: false,
+              timer: 1500
+            });
+
+            _this2.getListarUsuarios();
+          });
+        }
       });
     },
     inicializarPaginacion: function inicializarPaginacion() {
@@ -106068,11 +106110,19 @@ var render = function() {
                                             ),
                                             _vm._v(" "),
                                             _c(
-                                              "router-link",
+                                              "button",
                                               {
                                                 staticClass:
                                                   "btn btn-flat btn-danger btn-sm",
-                                                attrs: { to: "/" }
+                                                on: {
+                                                  click: function($event) {
+                                                    $event.preventDefault()
+                                                    return _vm.setCambiarEstadoUsuario(
+                                                      1,
+                                                      user.id
+                                                    )
+                                                  }
+                                                }
                                               },
                                               [
                                                 _c("i", {
@@ -106086,11 +106136,19 @@ var render = function() {
                                           ]
                                         : [
                                             _c(
-                                              "router-link",
+                                              "button",
                                               {
                                                 staticClass:
                                                   "btn btn-flat btn-primary btn-sm",
-                                                attrs: { to: "/" }
+                                                on: {
+                                                  click: function($event) {
+                                                    $event.preventDefault()
+                                                    return _vm.setCambiarEstadoUsuario(
+                                                      2,
+                                                      user.id
+                                                    )
+                                                  }
+                                                }
                                               },
                                               [
                                                 _c("i", {

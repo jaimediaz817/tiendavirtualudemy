@@ -156,14 +156,20 @@
                                                     <router-link class="btn btn-flat btn-success btn-sm" :to="'/'">
                                                         <i class="fas fa-key"></i> Permiso                                                
                                                     </router-link>
-                                                    <router-link class="btn btn-flat btn-danger btn-sm" :to="'/'">
+                                                    <button
+                                                        class="btn btn-flat btn-danger btn-sm"
+                                                        @click.prevent="setCambiarEstadoUsuario(1, user.id)"
+                                                    >
                                                         <i class="fas fa-trash"></i> Desactivar                                                
-                                                    </router-link>
+                                                    </button>
                                                 </template>
                                                 <template v-else>
-                                                    <router-link class="btn btn-flat btn-primary btn-sm" :to="'/'">
+                                                    <button 
+                                                        class="btn btn-flat btn-primary btn-sm"
+                                                        @click.prevent="setCambiarEstadoUsuario(2, user.id)"
+                                                    >
                                                         <i class="fas fa-folder"></i> Activar                                                
-                                                    </router-link>
+                                                    </button>
                                                     <!-- <router-link class="btn btn-flat btn-success btn-sm" :to="'/'">
                                                         <i class="fas fa-check"></i> Ver                                                
                                                     </router-link> -->
@@ -300,6 +306,7 @@ export default {
 
             axios.get(url, {
                 params: {
+                    'nIdUsuario':  this.fillBusquedaUsuario.nIdUsuario,
                     'cNombre'   :  this.fillBusquedaUsuario.cNombre,
                     'cUsuario'  :  this.fillBusquedaUsuario.cUsuario,
                     'cCorreo'   :  this.fillBusquedaUsuario.cCorreo,
@@ -313,6 +320,39 @@ export default {
             }).catch(error => {
                 console.log("error::::")
                 console.log(error)
+            })
+        },
+
+        setCambiarEstadoUsuario(estado, idUsuario)
+        {
+            // text: "You won't be able to revert this!",
+            Swal.fire({
+                title: '¿Está seguro de ' + ((estado == 1) ? 'desactivar' : 'activar') + ' el usuario?',                
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: ((estado == 1) ? 'Si, desactivar' : 'Si, activar'),
+                cancelButtonText: 'Cancelar operación'
+            }).then((result) => {
+                console.log("result :: ", result)
+                if (result.value) {
+                    // TODO: petición al servidor 
+                    this.fullscreenLoading = true;
+                    var url = '/administracion/usuario/setCambiarEstadoUsuario'
+                    axios.post(url, {
+                        'nIdUsuario': idUsuario,
+                        'cEstado'   : (estado == 1) ? 'I' : 'A'
+                    }).then( response => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Se ' + ((estado == 1) ? 'desativo' : 'activo') + ' el usuario',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        this.getListarUsuarios();
+                    })
+                }
             })
         },
 

@@ -22,11 +22,14 @@ class UsersController extends Controller
         $cCorreo    =   $request->cCorreo;
         $cEstado    =   $request->cEstado;
 
-        $nIdUsuario =   ($nIdUsuario  == NULL) ? ($nIdUsuario   =  '') : $nIdUsuario;
+        $nIdUsuario =   ($nIdUsuario  == NULL) ? ($nIdUsuario   =  0) : $nIdUsuario;
         $cNombre    =   ($cNombre     == NULL) ? ($cNombre   =  '') : $cNombre;
         $cUsuario   =   ($cUsuario    == NULL) ? ($cUsuario  =  '') : $cUsuario;
         $cCorreo    =   ($cCorreo     == NULL) ? ($cCorreo   =  '') : $cCorreo;
         $cEstado    =   ($cEstado     == NULL) ? ($cEstado   =  '') : $cEstado;
+
+        // echo "nId usuario valor ::: $nIdUsuario";
+        // exit(0);
 
         // Mecanismo procedimiento almacenado
         $respuesta  =   DB::select('call sp_Usuario_getListarUsuarios (?, ?, ?, ?, ?)', [
@@ -125,5 +128,24 @@ class UsersController extends Controller
         ]);
 
         return $respuesta;
+    }
+
+    public function setCambiarEstadoUsuario(Request $request)
+    {
+        if (!$request->ajax()) return redirect('/');
+
+        $nIdUsuario   =   $request->nIdUsuario;
+        $cEstado      =   $request->cEstado;
+
+        $nIdUsuario   =   ($nIdUsuario  == NULL) ? ($nIdUsuario   =   0) :  $nIdUsuario;
+        $cEstado      =   ($cEstado     == NULL) ? ($cEstado      =   0) :  $cEstado;
+
+        // Mecanismo procedimiento almacenado
+        $respuesta  =     DB::select('call sp_Usuario_setCambiarEstadoUsuario (?, ?)', [
+            $nIdUsuario,
+            $cEstado,
+        ]);
+
+        return $respuesta;        
     }
 }

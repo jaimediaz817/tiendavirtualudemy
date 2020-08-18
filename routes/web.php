@@ -26,6 +26,9 @@ Route::post('/administracion/usuario/setRegistrarUsuario', 'Administracion\Users
 // Editar Usuario
 Route::post('/administracion/usuario/setEditarUsuario', 'Administracion\UsersController@setEditarUsuario');
 
+// Cambiar estado: Usuario
+Route::post('/administracion/usuario/setCambiarEstadoUsuario', 'Administracion\UsersController@setCambiarEstadoUsuario');
+
 // guardar Archivo
 Route::post('/archivo/setRegistrarArchivo', 'FilesController@setRegistrarArchivo');
 
