@@ -114,13 +114,24 @@
                                     <tbody>
                                         <tr v-for="(user, index) in listarUsuariosPaginated" :key="index">
                                             <td>
-                                                <li class="user-block li-item-clearLi">
-                                                    <img 
-                                                        src="/img/avatar.png" 
-                                                        alt="user.username" 
-                                                        class="profile-avatar-img img-fluid img-circle"
-                                                    />
-                                                </li>                                                
+                                                <template v-if="!user.profile_image">
+                                                    <li class="user-block li-item-clearLi">
+                                                        <img 
+                                                            src="/img/avatar.png" 
+                                                            alt="user.username" 
+                                                            class="profile-avatar-img img-fluid img-circle"
+                                                        />
+                                                    </li>
+                                                </template>
+                                                <template v-else>
+                                                    <li class="user-block li-item-clearLi">
+                                                        <img 
+                                                            :src="user.profile_image" 
+                                                            :alt="user.username" 
+                                                            class="profile-avatar-img img-fluid img-circle"
+                                                        />
+                                                    </li>
+                                                </template>
                                             </td>
                                             <td v-text="user.fullname"></td>
                                             <td v-text="user.email"></td>
@@ -134,24 +145,30 @@
                                                 </template>                                            
                                             </td>
                                             <td>
-                                                <router-link class="btn btn-primary btn-sm" :to="'/'">
+                                                <router-link class="btn btn-flat btn-primary btn-sm" :to="'/'">
                                                     <i class="fas fa-folder"></i> Ver                                                
                                                 </router-link>
-                                                <router-link class="btn btn-info btn-sm" :to="'/'">
-                                                    <i class="fas fa-pencil-alt"></i> Editar                                                
-                                                </router-link>
-                                                <router-link class="btn btn-success btn-sm" :to="'/'">
-                                                    <i class="fas fa-key"></i> Permiso                                                
-                                                </router-link>
-                                                <router-link class="btn btn-danger btn-sm" :to="'/'">
-                                                    <i class="fas fa-trash"></i> Desactivar                                                
-                                                </router-link>
-                                                <router-link class="btn btn-primary btn-sm" :to="'/'">
-                                                    <i class="fas fa-folder"></i> Activar                                                
-                                                </router-link>
-                                                <router-link class="btn btn-success btn-sm" :to="'/'">
-                                                    <i class="fas fa-check"></i> Ver                                                
-                                                </router-link>                                                                  
+
+                                                <template v-if="user.state == 'A'">
+                                                    <router-link class="btn btn-flat btn-info btn-sm" :to="{ name: 'usuario.editar', params: { id: user.id }}">
+                                                        <i class="fas fa-pencil-alt"></i> Editar.                                        
+                                                    </router-link>
+                                                    <router-link class="btn btn-flat btn-success btn-sm" :to="'/'">
+                                                        <i class="fas fa-key"></i> Permiso                                                
+                                                    </router-link>
+                                                    <router-link class="btn btn-flat btn-danger btn-sm" :to="'/'">
+                                                        <i class="fas fa-trash"></i> Desactivar                                                
+                                                    </router-link>
+                                                </template>
+                                                <template v-else>
+                                                    <router-link class="btn btn-flat btn-primary btn-sm" :to="'/'">
+                                                        <i class="fas fa-folder"></i> Activar                                                
+                                                    </router-link>
+                                                    <!-- <router-link class="btn btn-flat btn-success btn-sm" :to="'/'">
+                                                        <i class="fas fa-check"></i> Ver                                                
+                                                    </router-link> -->
+                                                </template>
+
                                             </td>
                                         </tr>
                                     </tbody>

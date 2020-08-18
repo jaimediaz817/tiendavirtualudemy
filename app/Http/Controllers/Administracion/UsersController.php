@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Administracion;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
@@ -15,18 +16,21 @@ class UsersController extends Controller
             return redirect('/');
         }
 
+        $nIdUsuario =   $request->nIdUsuario;
         $cNombre    =   $request->cNombre;
         $cUsuario   =   $request->cUsuario;
         $cCorreo    =   $request->cCorreo;
         $cEstado    =   $request->cEstado;
 
-        $cNombre    =   ($cNombre  == NULL) ? ($cNombre   =  '') : $cNombre;
-        $cUsuario   =   ($cUsuario == NULL) ? ($cUsuario  =  '') : $cUsuario;
-        $cCorreo    =   ($cCorreo  == NULL) ? ($cCorreo   =  '') : $cCorreo;
-        $cEstado    =   ($cEstado  == NULL) ? ($cEstado   =  '') : $cEstado;
+        $nIdUsuario =   ($nIdUsuario  == NULL) ? ($nIdUsuario   =  '') : $nIdUsuario;
+        $cNombre    =   ($cNombre     == NULL) ? ($cNombre   =  '') : $cNombre;
+        $cUsuario   =   ($cUsuario    == NULL) ? ($cUsuario  =  '') : $cUsuario;
+        $cCorreo    =   ($cCorreo     == NULL) ? ($cCorreo   =  '') : $cCorreo;
+        $cEstado    =   ($cEstado     == NULL) ? ($cEstado   =  '') : $cEstado;
 
         // Mecanismo procedimiento almacenado
-        $respuesta  =   DB::select('call sp_Usuario_getListarUsuarios (?, ?, ?, ?)', [
+        $respuesta  =   DB::select('call sp_Usuario_getListarUsuarios (?, ?, ?, ?, ?)', [
+            $nIdUsuario,
             $cNombre,
             $cUsuario,
             $cCorreo,
@@ -63,15 +67,63 @@ class UsersController extends Controller
         // Mecanismo procedimiento almacenado
         $respuesta  =   DB::select('call sp_Usuario_setRegistrarUsuario (?, ?, ?, ?, ?, ?, ?)', [
             $cPrimerNombre,
-            $cApellido,      
             $cSegundoNombre,
+            $cApellido,                  
             $cUsuario,
             $cCorreo,      
             $cContrasena,
             $oFotografia
         ]);
 
-        return $respuesta;        
+        return $respuesta;
+    }
 
+    public function setEditarUsuario (Request $request)
+    {
+        if (!$request->ajax()) return redirect('/');
+
+        $nIdUsuario     = $request->nIdUsuario;
+        $cPrimerNombre  = $request->cPrimerNombre;
+        $cSegundoNombre = $request->cSegundoNombre;
+        $cApellido      = $request->cApellido;
+        $cUsuario       = $request->cUsuario;
+        $cCorreo        = $request->cCorreo;
+        $cContrasena    = $request->cContrasena;
+
+        if ($cContrasena != NULL) 
+        {
+            $cContrasena = Hash::make($cContrasena);
+        }        
+
+        $oFotografia    = $request->oFotografia;
+
+        //echo "foto: $oFotografia";
+
+        $nIdUsuario     = ($nIdUsuario      == NULL) ? ($nIdUsuario         =   '') : $nIdUsuario;
+        $cPrimerNombre  = ($cPrimerNombre   == NULL) ? ($cPrimerNombre      =   '') : $cPrimerNombre;
+        $cApellido      = ($cApellido       == NULL) ? ($cApellido          =   '') : $cApellido;
+        $cSegundoNombre = ($cSegundoNombre  == NULL) ? ($cSegundoNombre     =   '') : $cSegundoNombre;
+        $cUsuario       = ($cUsuario        == NULL) ? ($cUsuario           =   '') : $cUsuario;
+        $cCorreo        = ($cCorreo         == NULL) ? ($cCorreo            =   '') : $cCorreo;
+        $cContrasena    = ($cContrasena     == NULL) ? ($cContrasena        =   '') : $cContrasena;
+        $oFotografia    = ($oFotografia     == NULL) ? ($oFotografia        = NULL) : $oFotografia;
+
+        //echo "foto: $oFotografia , usuario: $cUsuario";
+        //var_dump($request);
+        //exit(0);
+
+        // Mecanismo procedimiento almacenado
+        $respuesta  =     DB::select('call sp_Usuario_setEditarUsuario (?, ?, ?, ?, ?, ?, ?, ?)', [
+            $nIdUsuario,
+            $cPrimerNombre,
+            $cSegundoNombre,
+            $cApellido,
+            $cUsuario,
+            $cCorreo,      
+            $cContrasena,
+            $oFotografia
+        ]);
+
+        return $respuesta;
     }
 }

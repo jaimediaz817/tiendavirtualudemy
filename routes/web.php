@@ -19,10 +19,15 @@ use Illuminate\Support\Facades\Route;
 
 // listar
 Route::get('/administracion/usuario/getListarUsuarios', 'Administracion\UsersController@getListarUsuarios');
-// guardar Archivo
-Route::post('/archivo/setRegistrarArchivo', 'FilesController@setRegistrarArchivo');
+
 // guardar Usuario
 Route::post('/administracion/usuario/setRegistrarUsuario', 'Administracion\UsersController@setRegistrarUsuario');
+
+// Editar Usuario
+Route::post('/administracion/usuario/setEditarUsuario', 'Administracion\UsersController@setEditarUsuario');
+
+// guardar Archivo
+Route::post('/archivo/setRegistrarArchivo', 'FilesController@setRegistrarArchivo');
 
 // TODO: se cambia el orden de llamado a las rutas
 Route::get('/{optional?}', function () {

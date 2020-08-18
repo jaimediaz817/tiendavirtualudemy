@@ -327,3 +327,10 @@ php artisan make:controller FilesController
 - Se procede a crear el enlace simbólico para el acceso a los archivos subidos:
 [COMANDO]:
 php artisan storage:link
+
+
+### INSTALANDO SWEET ALERT 2 PARA VUE:
+[COMANDO]:
+npm install sweetalert2
+
+- Acto seguido lo tenemos que registrar en el app.js
