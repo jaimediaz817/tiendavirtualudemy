@@ -44,6 +44,19 @@
     width: 49% !important;    
 }
 
+.btn-full {
+    width: 100% !important;
+}
+
+/* AVATAR COMPONENT */
+.custom-user-avatar {
+    max-height: 100px;
+    max-width: 100px;
+    height: 100px;
+    width: 100px;
+    border: 4px solid #d9d9d9;    
+}
+
 /* Element io SELECT STYLE */
 .el-select {
     width: 100%;

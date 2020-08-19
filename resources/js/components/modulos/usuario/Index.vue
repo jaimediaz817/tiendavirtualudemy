@@ -145,7 +145,10 @@
                                                 </template>                                            
                                             </td>
                                             <td>
-                                                <router-link class="btn btn-flat btn-primary btn-sm" :to="'/'">
+                                                <router-link 
+                                                    class="btn btn-flat btn-primary btn-sm" 
+                                                    :to="{ name: 'usuario.ver', params: { id: user.id }}"
+                                                >
                                                     <i class="fas fa-folder"></i> Ver                                                
                                                 </router-link>
 
@@ -335,7 +338,6 @@ export default {
                 confirmButtonText: ((estado == 1) ? 'Si, desactivar' : 'Si, activar'),
                 cancelButtonText: 'Cancelar operación'
             }).then((result) => {
-                console.log("result :: ", result)
                 if (result.value) {
                     // TODO: petición al servidor 
                     this.fullscreenLoading = true;

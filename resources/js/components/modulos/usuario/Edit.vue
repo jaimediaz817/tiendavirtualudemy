@@ -166,6 +166,17 @@ export default {
                 cContrasena    : '',
                 oFotografia    : '',
             },
+            fillVerUsuario: {
+                nIdUsuario     : this.$attrs.id,
+                cPrimerNombre  : '',
+                cSegundoNombre : '',
+                cApellido      : '',
+                cApellidos     : '',
+                cUsuario       : '',
+                cCorreo        : '',
+                cContrasena    : '',
+                oFotografia    : '',
+            },            
             // NEGOCIO
             form: new FormData,
             fullscreenLoading: false,
@@ -189,6 +200,12 @@ export default {
         // con base en el id Pasado.
         console.log("mounthed");
         this.getUsuarioById ();
+    },
+    computed: {
+        compCNombreCompleto()
+        {
+            return fillVerUsuario.cPrimerNombre + ' ' + fillVerUsuario.cSegundoNombre + ' ' + fillVerUsuario.cApellido;
+        }
     },
     methods: {
         getUsuarioById()
@@ -214,6 +231,13 @@ export default {
                 this.fullscreenLoading                  =       false;
             })
         },
+
+        // MODAL
+        abrirModal ()
+        {
+            this.modalShow = !this.modalShow;
+        },       
+
         setEditarUsuario ()
         {
             // TODO: comentado
@@ -253,6 +277,11 @@ export default {
                  })
                  .catch(err => console.log("error"))
         },
+        
+        setGuardarUsuarioSinFotografia()
+        {
+            this.setGuardarUsuario(0)
+        }, 
 
         setGuardarUsuario(nIdFile)
         {
@@ -279,11 +308,6 @@ export default {
             }).catch( error => console.log(error))
         },
 
-        setGuardarUsuarioSinFotografia()
-        {
-            this.setGuardarUsuario(0)
-        },
-
         limpiarFormulario ()
         {
             this.fillEditarUsuario.cPrimerNombre     = ''
@@ -300,12 +324,6 @@ export default {
         getFile(e)
         {
             this.fillEditarUsuario.oFotografia = e.target.files[0];
-        },
-
-        // MODAL
-        abrirModal ()
-        {
-            this.modalShow = !this.modalShow;
         },
 
         // VALIDACIONES
