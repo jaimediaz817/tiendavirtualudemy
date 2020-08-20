@@ -50,7 +50,7 @@
                     <!-- About Me Box -->
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">About Me</h3>
+                            <h3 class="card-title">Acerca de mi</h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -69,8 +69,13 @@
                 <div class="col-md-8">
                     <div class="card">
                     <div class="card-header p-2">
-                        <ul class="nav nav-pills">
-                        <li class="nav-item"><a class="nav-link active" href="#settings" data-toggle="tab">Settings</a></li>
+                        <ul class="nav nav-pills position-reverse">
+                            <li class="nav-item">
+                                <router-link :to="'/usuario'" class="nav-link active">
+                                    <i class="fas fa-arrow-left"></i> Regresar
+                                </router-link>
+                                <!-- <a class="nav-link active" href="#settings" data-toggle="tab">Settings</a> -->
+                            </li>
                         </ul>
                     </div><!-- /.card-header -->
                     <div class="card-body">
@@ -418,5 +423,7 @@ export default {
 </script>
 
 <style>
-
+    .position-reverse {
+        flex-direction: row-reverse !important;
+    }
 </style>

@@ -29,6 +29,11 @@ Route::post('/administracion/usuario/setEditarUsuario', 'Administracion\UsersCon
 // Cambiar estado: Usuario
 Route::post('/administracion/usuario/setCambiarEstadoUsuario', 'Administracion\UsersController@setCambiarEstadoUsuario');
 
+
+// ROLES ****
+// Cambiar estado: Usuario
+Route::get('/administracion/rol/getListarRoles', 'Administracion\RolesController@getListarRoles');
+
 // guardar Archivo
 Route::post('/archivo/setRegistrarArchivo', 'FilesController@setRegistrarArchivo');
 

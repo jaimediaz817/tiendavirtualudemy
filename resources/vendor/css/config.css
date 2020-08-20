@@ -25,7 +25,8 @@
     max-width: 100px;
     height: 100px;
     width: 100px;
-    border: 4px solid #d9d9d9;    
+    border: 4px solid #d9d9d9;
+    padding: 3px;
 }
 
 /* Element io SELECT STYLE */
