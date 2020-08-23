@@ -83,7 +83,7 @@
     <li class="nav-item">
         <router-link class="nav-link" :to="'/rol'">
             <i class="nav-icon fas fa-unlock-alt"></i>
-            <p>Roless</p>
+            <p>Roles</p>
         </router-link>
     </li>
     <li class="nav-item">

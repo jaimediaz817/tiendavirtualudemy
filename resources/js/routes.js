@@ -27,6 +27,7 @@ export default new Router({
         },
 
         { path: '/rol', component: require('./components/modulos/rol/Index').default },
+        { path: '/rol/crear', component: require('./components/modulos/rol/Create').default },
         { path: '/permiso', component: require('./components/modulos/permiso/Index').default },
         { path: '/reporte', component: require('./components/modulos/reporte/Index').default },
     ],

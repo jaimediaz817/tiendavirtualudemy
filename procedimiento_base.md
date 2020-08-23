@@ -334,3 +334,20 @@ php artisan storage:link
 npm install sweetalert2
 
 - Acto seguido lo tenemos que registrar en el app.js
+
+
+
+
+### MAS DATOS DE PRUEBA (SEMBRANDO DATOS) PARA LA TABLA PERMISOS - permissions
+
+- ejecutar:
+[COMANDO]:
+php artisan make:seeder PermissionsTableSeeder
+
+- Posteriormente crearemos el modelo para permisos:
+php artisan make:model Permission
+
+
+- Habilito en el fichero de DatabaseSeeder el seeder creado y ejecutamos:
+[COMANDO]:
+php artisan db:seed

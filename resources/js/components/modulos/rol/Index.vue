@@ -248,7 +248,11 @@ export default {
         selectCurrentPage(page) {
             this.pageNumber = page;
         }
-    }   
+    },
+
+    mounted() {
+        this.getListarRoles();
+    }
 }
 </script>
 
