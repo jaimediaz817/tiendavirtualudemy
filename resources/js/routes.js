@@ -28,6 +28,13 @@ export default new Router({
 
         { path: '/rol', component: require('./components/modulos/rol/Index').default },
         { path: '/rol/crear', component: require('./components/modulos/rol/Create').default },
+        { 
+            path: '/rol/editar/:id', 
+            name: 'rol.editar',
+            component: require('./components/modulos/rol/Edit').default,
+            props: true,
+        },        
+
         { path: '/permiso', component: require('./components/modulos/permiso/Index').default },
         { path: '/reporte', component: require('./components/modulos/reporte/Index').default },
     ],
