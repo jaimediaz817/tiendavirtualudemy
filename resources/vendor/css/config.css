@@ -37,3 +37,9 @@
 .li-item-clearLi {
     list-style: none;
 }
+
+/* Tablas Scrolleables */
+.scrollTable {
+    max-height: 350px !important;
+    overflow: auto !important;
+}
