@@ -37,6 +37,12 @@ export default new Router({
 
         { path: '/permiso', component: require('./components/modulos/permiso/Index').default },
         { path: '/permiso/crear', component: require('./components/modulos/permiso/Create').default },
+        { 
+            path: '/permiso/editar/:id', 
+            name: 'permiso.editar',
+            component: require('./components/modulos/permiso/Edit').default,
+            props: true,
+        },
 
         { path: '/reporte', component: require('./components/modulos/reporte/Index').default },
     ],

@@ -39,6 +39,7 @@ Route::post('/administracion/rol/setEditarRolPermisos', 'Administracion\RolesCon
 // PERMISOS ****
 Route::get('/administracion/permiso/getListarPermisos', 'Administracion\PermissionsController@getListarPermisos');
 Route::post('/administracion/permiso/setRegistrarPermiso', 'Administracion\PermissionsController@setRegistrarPermiso');
+Route::post('/administracion/permiso/setEditarPermiso', 'Administracion\PermissionsController@setEditarPermiso');
 
 // guardar Archivo
 Route::post('/archivo/setRegistrarArchivo', 'FilesController@setRegistrarArchivo');
