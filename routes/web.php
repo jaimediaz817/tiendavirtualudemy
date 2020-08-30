@@ -30,11 +30,15 @@ Route::post('/administracion/usuario/setEditarUsuario', 'Administracion\UsersCon
 Route::post('/administracion/usuario/setCambiarEstadoUsuario', 'Administracion\UsersController@setCambiarEstadoUsuario');
 
 
-// ROLES ****
+// ROLES    ****
 Route::get('/administracion/rol/getListarRoles', 'Administracion\RolesController@getListarRoles');
 Route::get('/administracion/rol/getListarPermisosByRol', 'Administracion\RolesController@getListarPermisosByRol');
 Route::post('/administracion/rol/setRegistrarRolPermisos', 'Administracion\RolesController@setRegistrarRolPermisos');
 Route::post('/administracion/rol/setEditarRolPermisos', 'Administracion\RolesController@setEditarRolPermisos');
+
+// PERMISOS ****
+Route::get('/administracion/permiso/getListarPermisos', 'Administracion\PermissionsController@getListarPermisos');
+Route::post('/administracion/permiso/setRegistrarPermiso', 'Administracion\PermissionsController@setRegistrarPermiso');
 
 // guardar Archivo
 Route::post('/archivo/setRegistrarArchivo', 'FilesController@setRegistrarArchivo');

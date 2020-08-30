@@ -42,6 +42,7 @@ class RolesController extends Controller
         $response = DB::select('call sp_Rol_getListarPermisosByRol (?)', [
             $nIdRol
         ]);
+
         return $response;
     }
 
@@ -55,22 +56,32 @@ class RolesController extends Controller
         $cNombre    =   ($cNombre     == NULL) ? ($cNombre   =  '') : $cNombre;
         $cSlug      =   ($cSlug       == NULL) ? ($cSlug     =  '') : $cSlug;        
 
-        // Mecanismo procedimiento almacenado
-        $respuesta  =   DB::select('call sp_Rol_setRegistrarRol (?, ?)', [
-            $cNombre,
-            $cSlug    
-        ]);
+        
+        //     echo "NIDROL  : " . $nIdRol;
+        //     var_dump($request->listPermisosFilter);
+        //     echo "resp::: \n";
+        //     var_dump($respuesta[0]->nIdRol);
+        // exit;
 
-        $nIdRol = $respuesta[0]->nIdRol;
+
 
         //  Transacciones
         try 
         {
-            DB::beginTransaction();
+            DB::beginTransaction();            
+
+            // Mecanismo procedimiento almacenado
+            $respuesta  =   DB::select('call sp_Rol_setRegistrarRol (?, ?)', [
+                $cNombre,
+                $cSlug    
+            ]);
+
+            $nIdRol = $respuesta[0]->nIdRol;
+
             $listPermisos       =       $request->listPermisosFilter;
             $listPermisosSize   =       sizeof($listPermisos);
 
-            if ($listPermisos > 0) {
+            if ($listPermisosSize > 0) {
                 
                 foreach ($listPermisos as $key => $value)
                 {
@@ -87,45 +98,63 @@ class RolesController extends Controller
             }
 
             DB::commit();
+            return json_encode(["sucess" => 817]);
         }
-        catch (\Exception $e)
+        catch (Exception $e)
         {
             // captura algún error ocurrido dentro del bloque "try"
             DB::rollBack();
+            return json_encode(["sucess" => 718, "error:" => $e]);
+            //echo "ojo:::::::::::::::::";
+
         }
     }
 
     public function setEditarRolPermisos(Request $request)
     {
+        $respuesta = array();
+
         if (!$request->ajax()) return redirect('/');
 
         $nIdRol     =   $request->nIdRol;
         $cNombre    =   $request->cNombre;
         $cSlug      =   $request->cSlug;
         
-        $nIdRol     =   ($nIdRol      == NULL) ? ($nIdRol    =  '') : $nIdRol;
+        $nIdRol     =   ($nIdRol      == NULL) ? ($nIdRol    =  0)  : $nIdRol;
         $cNombre    =   ($cNombre     == NULL) ? ($cNombre   =  '') : $cNombre;
         $cSlug      =   ($cSlug       == NULL) ? ($cSlug     =  '') : $cSlug;        
 
-        // Mecanismo procedimiento almacenado
-        $respuesta  =   DB::select('call sp_Rol_setEditarRol (?, ?, ?)', [
-            $nIdRol,
-            $cNombre,
-            $cSlug    
-        ]);
+        // TODO: test
+        // echo "nIDrOL: $nIdRol , cNombre: $cNombre, cSlug: $cSlug";
+        // var_dump($request); exit;
+
 
         //  Transacciones
         try 
         {
+
+
+            // echo "nIDrOL: $nIdRol , cNombre: $cNombre, cSlug: $cSlug";
+            // var_dump($request); exit;
+            
+            
             DB::beginTransaction();
+
+            // Mecanismo procedimiento almacenado
+            $respuesta  =   DB::select('call sp_Rol_setEditarRol (?, ?, ?)', [
+                $nIdRol,
+                $cNombre,
+                $cSlug    
+            ]);
+
+
             $listPermisos       =       $request->listPermisosFilter;
             $listPermisosSize   =       sizeof($listPermisos);
 
-            if ($listPermisos > 0) {
-                
+            if ($listPermisosSize > 0) 
+            {            
                 foreach ($listPermisos as $key => $value)
                 {
-
                     if ($value['checked'] == true) {
                         // Mecanismo procedimiento almacenado
                         $respuesta  =   DB::select('call sp_Rol_setRegistrarRolPermiso (?, ?)', [
@@ -133,16 +162,26 @@ class RolesController extends Controller
                             $value['id']
                         ]);
                     }
+                    else
+                    {
 
+                    }
                 }
             }
 
             DB::commit();
+
+            $respuesta['success'] = true;
+            return json_encode($respuesta);
+
         }
-        catch (\Exception $e)
+        catch (Exception $e)
         {
             // captura algún error ocurrido dentro del bloque "try"
             DB::rollBack();
+            $respuesta['success'] = false;
+            $respuesta['error'] = $e;
+            return json_encode($respuesta);
         }
     }
 }

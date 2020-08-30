@@ -42,7 +42,7 @@
                                             <div class="form-group row">
                                                 <label class="col-md-3 col-form-label">Url Amigable</label>
                                                 <div class="col-md-9">
-                                                    <input type="text" class="form-control" v-model="fillBusquedaRol.cUrl" @keyup.enter="getListarRoles">
+                                                    <input type="text" class="form-control" v-model="fillBusquedaRol.cSlug" @keyup.enter="getListarRoles">
                                                 </div>
                                             </div>
                                         </div>
@@ -180,7 +180,7 @@
                                                     <div class="form-group row">
                                                         <label class="col-md-12 col-form-label">Url Amigable</label>
                                                         <div class="col-md-12">
-                                                            <span class="form-control" v-text="fillVerRol.cUrl"></span>
+                                                            <span class="form-control" v-text="fillVerRol.cSlug"></span>
                                                         </div>
                                                     </div>
                                                 </div>                                      
@@ -256,11 +256,11 @@ export default {
         return {
             fillBusquedaRol: {
                 cNombre  : '',
-                cUrl : '',
+                cSlug : '',
             },
             fillVerRol: {
                 cNombre  : '',
-                cUrl : '',                
+                cSlug : '',                
             },
             fullscreenLoading: false,
             listRoles: [],
@@ -345,7 +345,7 @@ export default {
     methods: {
         limpiarCriteriosBusqueda() {
             this.fillBusquedaRol.cNombre  =  '';
-            this.fillBusquedaRol.cUrl =  '';
+            this.fillBusquedaRol.cSlug =  '';
         },
         limpiarBandejaRoles() {
             this.listRoles = [];
@@ -358,7 +358,7 @@ export default {
             axios.get(url, {
                 params: {
                     'cNombre'   :  this.fillBusquedaRol.cNombre,
-                    'cUrl'  :  this.fillBusquedaRol.cUrl,
+                    'cSlug'  :  this.fillBusquedaRol.cSlug,
                 }
             }).then( response => {
                 console.log(response.data);                                
@@ -395,7 +395,7 @@ export default {
         limpiarModal()
         {
             this.fillVerRol.cNombre = ''
-            this.fillVerRol.cUrl    = ''
+            this.fillVerRol.cSlug    = ''
             this.listPermisos       = []
             this.modalOption        = 0
         },
@@ -424,7 +424,7 @@ export default {
                         {
                             // setear info.
                             this.fillVerRol.cNombre     =      data.name;
-                            this.fillVerRol.cUrl        =      data.slug;
+                            this.fillVerRol.cSlug        =      data.slug;
 
                             // Obtener los permisos por el rol seleccionado
                             this.getListarPermisosByRol(data.id);
@@ -450,8 +450,5 @@ export default {
 </script>
 
 <style>
-    .scrollTable {
-        max-height: 350px !important;
-        overflow: auto !important;
-    }
+
 </style>

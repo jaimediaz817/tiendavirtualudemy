@@ -50,11 +50,12 @@
                                                 <div class="form-group row">
                                                     <label class="col-md-3 col-form-label">Url Amigable</label>
                                                     <div class="col-md-9">
+                                                        <!-- BOTON EDITAR -->
                                                         <el-input
                                                             placeholder="Ingrese la url amigable"
                                                             clearable
                                                             v-model="fillEditarRol.cSlug"
-                                                            @keyup.enter="setEditarRolPermisos"
+                                                            @keyup.enter="setEditarRolPermisos"                                                            
                                                         >
                                                         </el-input>
                                                     </div>
@@ -209,6 +210,7 @@ export default {
             }
 
             this.fullscreenLoading = true;
+        
 
             var url = '/administracion/rol/setEditarRolPermisos'
             axios.post(url, {
@@ -283,9 +285,9 @@ export default {
                     'nIdRol':   this.fillEditarRol.nIdRol
                 }
             }).then( response => {
+                console.log(":::::::::::::::::: data permissions By Role: ::::::::::::::::: ", this.listPermisos)
                 this.listPermisos = response.data;
-                this.filterPermisosByRol();
-                console.log("data permissions By Role: ", this.listPermisos)
+                this.filterPermisosByRol();                
             })
         },
 
@@ -300,6 +302,8 @@ export default {
                     'checked': (x.checked == 1) ? true : false
                 })
             });
+
+            console.log("permisos ya filtrados (2) :::  ", me.listPermisos);
         },
 
         marcarFila(index)

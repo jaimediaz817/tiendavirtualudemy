@@ -209,6 +209,8 @@ export default {
 
             this.fullscreenLoading = true;
 
+            console.log("list permisos filter: ",this.listPermisosFilter)
+
             var url = '/administracion/rol/setRegistrarRolPermisos'
             axios.post(url, {
                 'cNombre'            : this.fillCrearRol.cNombre,
