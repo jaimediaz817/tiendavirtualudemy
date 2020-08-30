@@ -102,7 +102,28 @@
                                                 <input type="file" class="form-control" @change="getFile">
                                             </div>
                                         </div>
-                                    </div>                                    
+                                    </div>   
+
+                                    <div class="col-md-6">
+                                        <div class="form-group row">
+                                            <label class="col-md-3 col-form-label">Rol</label>
+                                            <div class="col-md-9">
+                                                <el-select 
+                                                    v-model="fillCrearUsuario.nIdRol" 
+                                                    placeholder="Seleccione uno Rol"
+                                                    clearable
+                                                >
+                                                        <el-option
+                                                            v-for="item in listRoles"
+                                                            :key="item.id"
+                                                            :label="item.name"
+                                                            :value="item.id"
+                                                        >
+                                                        </el-option>
+                                                </el-select>
+                                            </div>
+                                        </div>
+                                    </div>                                                                       
 
                                 </div>
                             </form>
@@ -156,6 +177,7 @@ export default {
     data(){
         return {
             fillCrearUsuario: {
+                nIdRol         : '',
                 cPrimerNombre  : '',
                 cSegundoNombre : '',
                 cApellidos : '',
@@ -165,6 +187,7 @@ export default {
                 oFotografia    : '',
             },
             // NEGOCIO
+            listRoles: [],
             form: new FormData,
             fullscreenLoading: false,
 
@@ -238,11 +261,25 @@ export default {
                 'cContrasena'       : this.fillCrearUsuario.cContrasena,
                 'oFotografia'       : nIdFile
             }).then( respuesta => {
-                console.log("registro creado exitosamente")
-                this.fullscreenLoading = false;
-                this.$router.push('/usuario');
-
+                // console.log("registro creado exitosamente")
+                // this.fullscreenLoading = false;
+                // this.$router.push('/usuario');
+                this.setEditarRolByUsuario(respuesta.data)
             }).catch( error => console.log(error))
+        },
+
+        setEditarRolByUsuario(nIdUsuario)
+        {            
+            var url = '/administracion/usuario/setEditarRolByUsuario'
+            axios.put(url, {
+                'nIdUsuario'        : nIdUsuario,
+                'nIdRol'            : this.fillCrearUsuario.nIdRol,
+            }).then( respuesta => {
+                this.fullscreenLoading = false
+
+                console.log("set rol al usuario creado")
+                this.$router.push('/usuario')
+            }).catch( error => console.log(error))            
         },
 
         setGuardarUsuarioSinFotografia()
@@ -300,13 +337,43 @@ export default {
                 this.mensajeError.push('La contraseña es un campo obligatorio')
             }
 
+            // validar seleccion de rol
+            if ( !this.fillCrearUsuario.nIdRol ) {
+                this.mensajeError.push('Es necesario que seleccione un rol pordefecto del usuario')                
+            }
+
             if (this.mensajeError.length) {
                 this.error = 1
             }
 
             return this.error
-        }
-    }   
+        },
+
+        getListarRoles() 
+        {
+            this.fullscreenLoading = true;
+            var url = '/administracion/rol/getListarRoles'
+
+            axios.get(url, {
+                params: {
+                    'cNombre'   :  this.fillCrearUsuario.cNombre,
+                    'cSlug'  :  this.fillCrearUsuario.cSlug,
+                }
+            }).then( response => {                                
+                this.listRoles = response.data;
+                this.fullscreenLoading = false;
+            }).catch(error => {
+                console.log(error)
+            })
+        },        
+    },
+    
+    mounted()
+    {
+        this.getListarRoles();
+        console.log("listado de variables de instancia:" , this.fillCrearUsuario)
+    }
+    
 }
 </script>
 

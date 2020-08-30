@@ -17,17 +17,16 @@ use Illuminate\Support\Facades\Route;
 
 */
 
+// USUARIOS    ****
 // listar
 Route::get('/administracion/usuario/getListarUsuarios', 'Administracion\UsersController@getListarUsuarios');
-
 // guardar Usuario
 Route::post('/administracion/usuario/setRegistrarUsuario', 'Administracion\UsersController@setRegistrarUsuario');
-
 // Editar Usuario
 Route::post('/administracion/usuario/setEditarUsuario', 'Administracion\UsersController@setEditarUsuario');
-
 // Cambiar estado: Usuario
 Route::post('/administracion/usuario/setCambiarEstadoUsuario', 'Administracion\UsersController@setCambiarEstadoUsuario');
+Route::put('/administracion/usuario/setEditarRolByUsuario', 'Administracion\UsersController@setEditarRolByUsuario');
 
 
 // ROLES    ****

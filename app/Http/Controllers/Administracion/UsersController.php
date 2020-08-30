@@ -78,7 +78,7 @@ class UsersController extends Controller
             $oFotografia
         ]);
 
-        return $respuesta;
+        return $respuesta[0]->nIdUsuario;
     }
 
     public function setEditarUsuario (Request $request)
@@ -144,6 +144,26 @@ class UsersController extends Controller
         $respuesta  =     DB::select('call sp_Usuario_setCambiarEstadoUsuario (?, ?)', [
             $nIdUsuario,
             $cEstado,
+        ]);
+
+        return $respuesta;        
+    }
+
+
+    public function setEditarRolByUsuario(Request $request)
+    {
+        if (!$request->ajax()) return redirect('/');
+
+        $nIdUsuario     = $request->nIdUsuario;
+        $nIdRol         = $request->nIdRol;
+
+        $nIdUsuario     = ($nIdUsuario      == NULL) ? ($nIdUsuario         =   '') : $nIdUsuario;
+        $nIdRol         = ($nIdRol          == NULL) ? ($nIdRol             =   '') : $nIdRol;    
+        
+        // Mecanismo procedimiento almacenado
+        $respuesta  =     DB::select('call sp_Usuario_setEditarRolByUsuario (?, ?)', [
+            $nIdUsuario,
+            $nIdRol
         ]);
 
         return $respuesta;        

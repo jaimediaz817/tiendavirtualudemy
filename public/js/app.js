@@ -6822,10 +6822,32 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       fillCrearUsuario: {
+        nIdRol: '',
         cPrimerNombre: '',
         cSegundoNombre: '',
         cApellidos: '',
@@ -6835,6 +6857,7 @@ __webpack_require__.r(__webpack_exports__);
         oFotografia: ''
       },
       // NEGOCIO
+      listRoles: [],
       form: new FormData(),
       fullscreenLoading: false,
       // MODALES
@@ -6905,10 +6928,26 @@ __webpack_require__.r(__webpack_exports__);
         'cContrasena': this.fillCrearUsuario.cContrasena,
         'oFotografia': nIdFile
       }).then(function (respuesta) {
-        console.log("registro creado exitosamente");
-        _this2.fullscreenLoading = false;
+        // console.log("registro creado exitosamente")
+        // this.fullscreenLoading = false;
+        // this.$router.push('/usuario');
+        _this2.setEditarRolByUsuario(respuesta.data);
+      })["catch"](function (error) {
+        return console.log(error);
+      });
+    },
+    setEditarRolByUsuario: function setEditarRolByUsuario(nIdUsuario) {
+      var _this3 = this;
 
-        _this2.$router.push('/usuario');
+      var url = '/administracion/usuario/setEditarRolByUsuario';
+      axios.put(url, {
+        'nIdUsuario': nIdUsuario,
+        'nIdRol': this.fillCrearUsuario.nIdRol
+      }).then(function (respuesta) {
+        _this3.fullscreenLoading = false;
+        console.log("set rol al usuario creado");
+
+        _this3.$router.push('/usuario');
       })["catch"](function (error) {
         return console.log(error);
       });
@@ -6957,6 +6996,11 @@ __webpack_require__.r(__webpack_exports__);
 
       if (!this.fillCrearUsuario.cContrasena) {
         this.mensajeError.push('La contraseña es un campo obligatorio');
+      } // validar seleccion de rol
+
+
+      if (!this.fillCrearUsuario.nIdRol) {
+        this.mensajeError.push('Es necesario que seleccione un rol pordefecto del usuario');
       }
 
       if (this.mensajeError.length) {
@@ -6964,7 +7008,28 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       return this.error;
+    },
+    getListarRoles: function getListarRoles() {
+      var _this4 = this;
+
+      this.fullscreenLoading = true;
+      var url = '/administracion/rol/getListarRoles';
+      axios.get(url, {
+        params: {
+          'cNombre': this.fillCrearUsuario.cNombre,
+          'cSlug': this.fillCrearUsuario.cSlug
+        }
+      }).then(function (response) {
+        _this4.listRoles = response.data;
+        _this4.fullscreenLoading = false;
+      })["catch"](function (error) {
+        console.log(error);
+      });
     }
+  },
+  mounted: function mounted() {
+    this.getListarRoles();
+    console.log("listado de variables de instancia:", this.fillCrearUsuario);
   }
 });
 
@@ -112022,6 +112087,51 @@ var render = function() {
                             on: { change: _vm.getFile }
                           })
                         ])
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-md-6" }, [
+                      _c("div", { staticClass: "form-group row" }, [
+                        _c(
+                          "label",
+                          { staticClass: "col-md-3 col-form-label" },
+                          [_vm._v("Rol")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "col-md-9" },
+                          [
+                            _c(
+                              "el-select",
+                              {
+                                attrs: {
+                                  placeholder: "Seleccione uno Rol",
+                                  clearable: ""
+                                },
+                                model: {
+                                  value: _vm.fillCrearUsuario.nIdRol,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.fillCrearUsuario,
+                                      "nIdRol",
+                                      $$v
+                                    )
+                                  },
+                                  expression: "fillCrearUsuario.nIdRol"
+                                }
+                              },
+                              _vm._l(_vm.listRoles, function(item) {
+                                return _c("el-option", {
+                                  key: item.id,
+                                  attrs: { label: item.name, value: item.id }
+                                })
+                              }),
+                              1
+                            )
+                          ],
+                          1
+                        )
                       ])
                     ])
                   ])
