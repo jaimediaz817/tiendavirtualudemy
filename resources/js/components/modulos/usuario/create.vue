@@ -104,6 +104,7 @@
                                         </div>
                                     </div>   
 
+                                    <!-- DESPLIEGA LOS ROLES DISPONIBLES -->
                                     <div class="col-md-6">
                                         <div class="form-group row">
                                             <label class="col-md-3 col-form-label">Rol</label>
@@ -123,7 +124,7 @@
                                                 </el-select>
                                             </div>
                                         </div>
-                                    </div>                                                                       
+                                    </div>                                         
 
                                 </div>
                             </form>
@@ -339,7 +340,7 @@ export default {
 
             // validar seleccion de rol
             if ( !this.fillCrearUsuario.nIdRol ) {
-                this.mensajeError.push('Es necesario que seleccione un rol pordefecto del usuario')                
+                this.mensajeError.push('Es necesario que seleccione un rol por defecto del usuario')                
             }
 
             if (this.mensajeError.length) {
@@ -354,12 +355,7 @@ export default {
             this.fullscreenLoading = true;
             var url = '/administracion/rol/getListarRoles'
 
-            axios.get(url, {
-                params: {
-                    'cNombre'   :  this.fillCrearUsuario.cNombre,
-                    'cSlug'  :  this.fillCrearUsuario.cSlug,
-                }
-            }).then( response => {                                
+            axios.get(url).then( response => {                                
                 this.listRoles = response.data;
                 this.fullscreenLoading = false;
             }).catch(error => {

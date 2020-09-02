@@ -156,7 +156,7 @@
                                                     <router-link class="btn btn-flat btn-info btn-sm" :to="{ name: 'usuario.editar', params: { id: user.id }}">
                                                         <i class="fas fa-pencil-alt"></i> Editar.                                        
                                                     </router-link>
-                                                    <router-link class="btn btn-flat btn-success btn-sm" :to="'/'">
+                                                    <router-link class="btn btn-flat btn-success btn-sm" :to="{ name: 'usuario.permiso', params: { id: user.id }}">
                                                         <i class="fas fa-key"></i> Permiso                                                
                                                     </router-link>
                                                     <button

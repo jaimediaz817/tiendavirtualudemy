@@ -102,7 +102,30 @@
                                                 <input type="file" class="form-control" @change="getFile">
                                             </div>
                                         </div>
-                                    </div>                                    
+                                    </div>     
+
+
+                                    <!-- DESPLIEGA LOS ROLES DISPONIBLES -->
+                                    <div class="col-md-6">
+                                        <div class="form-group row">
+                                            <label class="col-md-3 col-form-label">Rol</label>
+                                            <div class="col-md-9">
+                                                <el-select 
+                                                    v-model="fillEditarUsuario.nIdRol" 
+                                                    placeholder="Seleccione uno Rol"
+                                                    clearable
+                                                >
+                                                        <el-option
+                                                            v-for="item in listRoles"
+                                                            :key="item.id"
+                                                            :label="item.name"
+                                                            :value="item.id"
+                                                        >
+                                                        </el-option>
+                                                </el-select>
+                                            </div>
+                                        </div>
+                                    </div>                                                                   
 
                                 </div>
                             </form>
@@ -157,6 +180,7 @@ export default {
         return {
             fillEditarUsuario: {
                 nIdUsuario     : this.$attrs.id,
+                mIdRol         : '',
                 cPrimerNombre  : '',
                 cSegundoNombre : '',
                 cApellido      : '',
@@ -178,8 +202,9 @@ export default {
                 oFotografia    : '',
             },            
             // NEGOCIO
-            form: new FormData,
-            fullscreenLoading: false,
+            form               : new FormData,
+            fullscreenLoading  : false,
+            listRoles          : [],
 
             // MODALES
             modalShow: false,
@@ -195,12 +220,7 @@ export default {
             mensajeError: [],
         }
     },
-    mounted() {
-        // al cargar el componente, obtener info. del usuario seleccionado
-        // con base en el id Pasado.
-        console.log("mounthed");
-        this.getUsuarioById ();
-    },
+
     computed: {
         compCNombreCompleto()
         {
@@ -283,31 +303,6 @@ export default {
             this.setGuardarUsuario(0)
         }, 
 
-        setGuardarUsuario(nIdFile)
-        {
-            var url = '/administracion/usuario/setEditarUsuario'
-            axios.post(url, {
-                'nIdUsuario'        : this.fillEditarUsuario.nIdUsuario,
-                'cPrimerNombre'     : this.fillEditarUsuario.cPrimerNombre,
-                'cSegundoNombre'    : this.fillEditarUsuario.cSegundoNombre,
-                'cApellido'         : this.fillEditarUsuario.cApellido,
-                'cUsuario'         : this.fillEditarUsuario.cUsuario,
-                'cCorreo'           : this.fillEditarUsuario.cCorreo,
-                'cContrasena'       : this.fillEditarUsuario.cContrasena,
-                'oFotografia'       : nIdFile
-            }).then( respuesta => {
-                console.log("registro editado exitosamente")
-                this.fullscreenLoading = false;   
-                // position: 'top-end',
-                Swal.fire({                    
-                    icon: 'success',
-                    title: 'Se actualizó el usuario correctamente',
-                    showConfirmButton: false,
-                    timer: 1500
-                })         
-            }).catch( error => console.log(error))
-        },
-
         limpiarFormulario ()
         {
             this.fillEditarUsuario.cPrimerNombre     = ''
@@ -348,13 +343,95 @@ export default {
                 this.mensajeError.push('El correo electrónico es un campo obligatorio')
             }
 
+            if ( !this.fillEditarUsuario.nIdRol ) {
+                this.mensajeError.push('Debe seleccionar el Rol desde la lista desplegable')
+            }            
+
             if (this.mensajeError.length) {
                 this.error = 1
             }
 
             return this.error
-        }
-    }   
+        },
+
+        getListarRoles() 
+        {
+            this.fullscreenLoading = true;
+            var url = '/administracion/rol/getListarRoles'
+
+            axios.get(url).then( response => {                                
+                this.listRoles = response.data;
+                this.fullscreenLoading = false;
+            }).catch(error => {
+                console.log(error)
+            })
+        },
+        getRolByUsuario()
+        {
+            this.fullscreenLoading = true;
+            var url = '/administracion/usuario/getRolByUsuario'
+
+            axios.get(url, {
+                params: {
+                    'nIdUsuario'    :   this.fillEditarUsuario.nIdUsuario
+                }
+            }).then( response => {
+                console.log(response.data)
+                this.fillEditarUsuario.mIdRol       =     (response.data.length == 0) ? '' : response.data[0].nIdRol;
+                this.fullscreenLoading = false;
+            }).catch(error => {
+                console.log(error)
+            })            
+        },
+
+        setEditarRolByUsuario()
+        {            
+            var url = '/administracion/usuario/setEditarRolByUsuario'
+            axios.put(url, {
+                'nIdUsuario'        : this.fillEditarUsuario.nIdUsuario,
+                'nIdRol'            : this.fillEditarUsuario.nIdRol,
+            }).then( respuesta => {
+                this.fullscreenLoading = false
+                this.$router.push('/usuario')
+            }).catch( error => console.log(error))            
+        },   
+        
+        setGuardarUsuario(nIdFile)
+        {
+            var url = '/administracion/usuario/setEditarUsuario'
+            axios.post(url, {
+                'nIdUsuario'        : this.fillEditarUsuario.nIdUsuario,
+                'cPrimerNombre'     : this.fillEditarUsuario.cPrimerNombre,
+                'cSegundoNombre'    : this.fillEditarUsuario.cSegundoNombre,
+                'cApellido'         : this.fillEditarUsuario.cApellido,
+                'cUsuario'         : this.fillEditarUsuario.cUsuario,
+                'cCorreo'           : this.fillEditarUsuario.cCorreo,
+                'cContrasena'       : this.fillEditarUsuario.cContrasena,
+                'oFotografia'       : nIdFile
+            }).then( respuesta => {
+                console.log("registro editado exitosamente")
+                setEditarRolByUsuario()
+                this.fullscreenLoading = false;   
+                // position: 'top-end',
+                Swal.fire({                    
+                    icon: 'success',
+                    title: 'Se actualizó el usuario correctamente',
+                    showConfirmButton: false,
+                    timer: 1500
+                })         
+            }).catch( error => console.log(error))
+        },        
+    },
+
+    mounted() {
+        // al cargar el componente, obtener info. del usuario seleccionado
+        // con base en el id Pasado.
+        console.log("mounthed");
+        this.getUsuarioById ();
+        this.getListarRoles();
+
+        this.getRolByUsuario();
+    },    
 }
 </script>
 

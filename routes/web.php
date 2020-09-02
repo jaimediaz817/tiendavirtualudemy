@@ -27,6 +27,8 @@ Route::post('/administracion/usuario/setEditarUsuario', 'Administracion\UsersCon
 // Cambiar estado: Usuario
 Route::post('/administracion/usuario/setCambiarEstadoUsuario', 'Administracion\UsersController@setCambiarEstadoUsuario');
 Route::put('/administracion/usuario/setEditarRolByUsuario', 'Administracion\UsersController@setEditarRolByUsuario');
+Route::get('/administracion/usuario/getRolByUsuario', 'Administracion\UsersController@getRolByUsuario');
+
 
 
 // ROLES    ****
