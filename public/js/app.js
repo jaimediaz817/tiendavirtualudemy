@@ -6332,7 +6332,329 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      fillPermiso: {
+        nIdUsuario: this.$attrs.id,
+        cNombreRol: ''
+      },
+      listPermisosByRolAsignado: [],
+      listPermisos: [],
+      listPermisosFilter: [],
+      fullscreenLoading: false,
+      // MODALES
+      modalShow: false,
+      mostrarModal: {
+        display: 'block',
+        background: '#0000006b'
+      },
+      ocultarModal: {
+        display: 'none'
+      },
+      // ERRORES
+      error: 0,
+      mensajeError: []
+    };
+  },
+  computed: {},
+  methods: {
+    getListarPermisosByRolAsignado: function getListarPermisosByRolAsignado() {
+      var _this = this;
+
+      var ruta = '/administracion/usuario/getListarPermisosByRolAsignado';
+      axios.get(ruta, {
+        params: {
+          'nIdUsuario': this.fillPermiso.nIdUsuario
+        }
+      }).then(function (response) {
+        _this.listPermisosByRolAsignado = response.data;
+      });
+    },
+    getListarPermisosByUsuario: function getListarPermisosByUsuario() {
+      var _this2 = this;
+
+      var ruta = '/administracion/usuario/getListarPermisosByUsuario';
+      axios.get(ruta, {
+        params: {
+          'nIdUsuario': this.fillPermiso.nIdUsuario
+        }
+      }).then(function (response) {
+        console.log("inicial: response.data: ", response);
+        _this2.listPermisos = response.data;
+
+        _this2.filterPermisosByUsuario();
+
+        console.log("data permissions By Role: ", _this2.listPermisos);
+      });
+    },
+    // setRegistrarRolPermisos
+    //setRegistrarPermisosByUsuario
+    setRegistrarPermisosByUsuario: function setRegistrarPermisosByUsuario() {
+      var _this3 = this;
+
+      if (this.validarRegistrarPermisosByUsuario()) {
+        this.modalShow = true;
+        return;
+      }
+
+      this.fullscreenLoading = true;
+      console.log("list permisos filter: ", this.listPermisosFilter);
+      var url = '/administracion/usuario/setRegistrarPermisosByUsuario';
+      axios.post(url, {
+        'nIdUsuario': this.fillPermiso.nIdUsuario,
+        'listPermisosFilter': this.listPermisosFilter
+      }).then(function (respuesta) {
+        console.log("registro creado exitosamente");
+        _this3.fullscreenLoading = false;
+        Swal.fire({
+          icon: 'success',
+          title: 'Se otorgaron los permisos al usuario correctamente',
+          showConfirmButton: false,
+          timer: 1500
+        });
+      })["catch"](function (error) {
+        return console.log(error);
+      });
+    },
+    limpiarFormulario: function limpiarFormulario() {
+      this.fillPermiso.cNombre = '';
+      this.fillPermiso.cSlug = '';
+    },
+    // MODAL
+    abrirModal: function abrirModal() {
+      this.modalShow = !this.modalShow;
+    },
+    // VALIDACIONES
+    validarRegistrarPermisosByUsuario: function validarRegistrarPermisosByUsuario() {
+      this.error = 0;
+      this.mensajeError = []; // VLIDAR QUE EXISTA POR LO MENOS UN PERMISO SELECCIONADO
+
+      var contador = 0;
+      this.listPermisosFilter.map(function (x, y) {
+        if (x.checked == true) {
+          contador++;
+        }
+      });
+
+      if (contador == 0) {
+        this.mensajeError.push("Debe seleccionar por lo menos un permiso desde la lista");
+      }
+
+      if (this.mensajeError.length) {
+        this.error = 1;
+      }
+
+      return this.error;
+    },
+    filterPermisosByUsuario: function filterPermisosByUsuario() {
+      var me = this;
+      me.listPermisos.map(function (x, y) {
+        me.listPermisosFilter.push({
+          'id': x.id,
+          'name': x.name,
+          'slug': x.slug,
+          'checked': x.checked == 1 ? true : false
+        });
+      });
+    },
+    // acticlav@bancolombia.com.co
+    // activación de clave principal 18402120
+    // 
+    marcarFila: function marcarFila(index) {
+      this.listPermisosFilter[index].checked = !this.listPermisosFilter[index].checked;
+    },
+    getRolByUsuario: function getRolByUsuario() {
+      var _this4 = this;
+
+      this.fullscreenLoading = true;
+      var url = '/administracion/usuario/getRolByUsuario';
+      axios.get(url, {
+        params: {
+          'nIdUsuario': this.fillPermiso.nIdUsuario
+        }
+      }).then(function (response) {
+        //this.fillPermiso.nIdRol  =  (response.data.length == 0) ? '' : response.data[0].nIdRol;
+        console.log("resp metodo refactorizado: ", response.data);
+        _this4.fillPermiso.cNombreRol = response.data.length == 0 ? '' : response.data[0].name;
+        _this4.fullscreenLoading = false;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    }
+  },
+  // MONTADO
+  mounted: function mounted() {
+    this.getListarPermisosByRolAsignado();
+    this.getRolByUsuario();
+    this.getListarPermisosByUsuario();
+  }
+});
 
 /***/ }),
 
@@ -111268,9 +111590,356 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("\n    permission\n")])
+  return _c("div", [
+    _c("div", { staticClass: "content-header" }, [
+      _c("div", { staticClass: "container-fluid" }, [
+        _c("div", { staticClass: "row mb-2" }, [
+          _c("div", { staticClass: "col-sm-6" }, [
+            _c("h1", { staticClass: "m-0 text-dark" }, [
+              _vm._v(
+                "Listar Permisos del Rol " + _vm._s(_vm.fillPermiso.cNombreRol)
+              )
+            ])
+          ])
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "content container-fluid" }, [
+      _c("div", { staticClass: "card" }, [
+        _c("div", { staticClass: "card-header" }, [
+          _c(
+            "div",
+            { staticClass: "card-tools" },
+            [
+              _c(
+                "router-link",
+                {
+                  staticClass: "btn btn-info btn-sm",
+                  attrs: { to: "/usuario" }
+                },
+                [
+                  _c("i", { staticClass: "fas fa-arrow-left" }),
+                  _vm._v(
+                    "\r\n                        Regresar\r\n                    "
+                  )
+                ]
+              )
+            ],
+            1
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "card-body" }, [
+          _c("div", { staticClass: "container-fluid" }, [
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-md-5" }, [
+                _c("div", { staticClass: "card card-info" }, [
+                  _vm._m(0),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "card-body" },
+                    [
+                      _vm.listPermisosByRolAsignado.length
+                        ? [
+                            _c("div", { staticClass: "scrollTable" }, [
+                              _c(
+                                "table",
+                                {
+                                  staticClass:
+                                    "table table-hover table-head-fixed text-nowrap projects"
+                                },
+                                [
+                                  _vm._m(1),
+                                  _vm._v(" "),
+                                  _c(
+                                    "tbody",
+                                    _vm._l(
+                                      _vm.listPermisosByRolAsignado,
+                                      function(item, index) {
+                                        return _c(
+                                          "tr",
+                                          {
+                                            key: index,
+                                            on: {
+                                              click: function($event) {
+                                                $event.preventDefault()
+                                                return _vm.marcarFila(index)
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _c("td", {
+                                              domProps: {
+                                                textContent: _vm._s(item.name)
+                                              }
+                                            }),
+                                            _vm._v(" "),
+                                            _c("td", {
+                                              domProps: {
+                                                textContent: _vm._s(item.slug)
+                                              }
+                                            })
+                                          ]
+                                        )
+                                      }
+                                    ),
+                                    0
+                                  )
+                                ]
+                              )
+                            ])
+                          ]
+                        : [_vm._m(2)]
+                    ],
+                    2
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-md-7" }, [
+                _c("div", { staticClass: "card card-info" }, [
+                  _vm._m(3),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "card-body table-responsive" },
+                    [
+                      _vm.listPermisosFilter.length
+                        ? [
+                            _c("div", { staticClass: "scrollTable" }, [
+                              _c(
+                                "table",
+                                {
+                                  staticClass:
+                                    "table table-hover table-head-fixed text-nowrap projects"
+                                },
+                                [
+                                  _vm._m(4),
+                                  _vm._v(" "),
+                                  _c(
+                                    "tbody",
+                                    _vm._l(_vm.listPermisosFilter, function(
+                                      item,
+                                      index
+                                    ) {
+                                      return _c(
+                                        "tr",
+                                        {
+                                          key: index,
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.marcarFila(index)
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _c(
+                                            "td",
+                                            [
+                                              _c("el-checkbox", {
+                                                model: {
+                                                  value: item.checked,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      item,
+                                                      "checked",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression: "item.checked"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _c("td", {
+                                            domProps: {
+                                              textContent: _vm._s(item.name)
+                                            }
+                                          }),
+                                          _vm._v(" "),
+                                          _c("td", {
+                                            domProps: {
+                                              textContent: _vm._s(item.slug)
+                                            }
+                                          })
+                                        ]
+                                      )
+                                    }),
+                                    0
+                                  )
+                                ]
+                              )
+                            ])
+                          ]
+                        : [_vm._m(5)],
+                      _vm._v(" "),
+                      _c("div", { staticClass: "card-footer clearfix" })
+                    ],
+                    2
+                  )
+                ])
+              ])
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "card-footer" }, [
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-md-4 offset-4" }, [
+              _c(
+                "button",
+                {
+                  directives: [
+                    {
+                      name: "loading",
+                      rawName: "v-loading.fullscreen.lock",
+                      value: _vm.fullscreenLoading,
+                      expression: "fullscreenLoading",
+                      modifiers: { fullscreen: true, lock: true }
+                    }
+                  ],
+                  staticClass: "btn btn-flat btn-info btnWidth",
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.setRegistrarPermisosByUsuario($event)
+                    }
+                  }
+                },
+                [
+                  _vm._v(
+                    "\r\n                        Registrar\r\n                        "
+                  )
+                ]
+              )
+            ])
+          ])
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        class: { show: _vm.modalShow },
+        style: _vm.modalShow ? _vm.mostrarModal : _vm.ocultarModal
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header" }, [
+                _c("h5", { staticClass: "modal-title" }, [
+                  _vm._v("Sistema de Laravel y Vue")
+                ]),
+                _vm._v(" "),
+                _c("button", {
+                  staticClass: "close",
+                  on: { click: _vm.abrirModal }
+                })
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "modal-body" },
+                _vm._l(_vm.mensajeError, function(item, index) {
+                  return _c("div", {
+                    key: index,
+                    staticClass: "callout callout-danger",
+                    staticStyle: { padding: "5px" },
+                    domProps: { textContent: _vm._s(item) }
+                  })
+                }),
+                0
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    on: { click: _vm.abrirModal }
+                  },
+                  [_vm._v("Cerrar")]
+                )
+              ])
+            ])
+          ]
+        )
+      ]
+    )
+  ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-header" }, [
+      _c("h3", { staticClass: "card-title" }, [
+        _vm._v("Formulario Registrar Rol")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Nombre")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Url amigable")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "callout callout-info" }, [
+      _c("h5", [_vm._v("No se encontraron resultados...")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-header" }, [
+      _c("h3", { staticClass: "card-title" }, [_vm._v("Listar Permisos")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Acción")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Nombre")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Url amigable")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "callout callout-info" }, [
+      _c("h5", [_vm._v("No se encontraron resultados...")])
+    ])
+  }
+]
 render._withStripped = true
 
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Administracion;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -182,6 +183,93 @@ class UsersController extends Controller
             $nIdUsuario
         ]);
 
-        return $respuesta;                
+        return $respuesta;
+    }
+
+    public function getListarPermisosByRolAsignado (Request $request)
+    {
+        if (!$request->ajax()) return redirect('/');
+
+        $nIdUsuario     = $request->nIdUsuario;
+        $nIdUsuario     = ($nIdUsuario      == NULL) ? ($nIdUsuario         =   '') : $nIdUsuario;
+        
+
+        /**
+         * Obtener los permisos que tiene ese rol  por usuario
+         */
+        // Mecanismo procedimiento almacenado
+        $respuesta  =     DB::select('call sp_Usuario_getListarPermisosByRolAsignado (?)', [
+            $nIdUsuario
+        ]);
+
+        return $respuesta;
+    }
+
+    // TODO: here:  05-09-2020
+    public function getListarPermisosByUsuario(Request $request)
+    {
+        if (!$request->ajax()) return redirect('/');
+
+        $nIdUsuario  = $request->nIdUsuario;
+        $nIdUsuario  = ($nIdUsuario  == NULL) ? ($nIdUsuario   =   0) : $nIdUsuario;
+        
+
+        /**
+         * Obtener los permisos que tiene ese rol  por usuario
+         */
+        // Mecanismo procedimiento almacenado
+        $respuesta  =     DB::select('call sp_Usuario_getListarPermisosByUsuario (?)', [
+            $nIdUsuario
+        ]);
+
+        return $respuesta;        
+    }
+
+    public function setRegistrarPermisosByUsuario(Request $request)
+    {
+        if (!$request->ajax()) return redirect('/');
+
+        $nIdUsuario  = $request->nIdUsuario;
+        $nIdUsuario  = ($nIdUsuario  == NULL) ? ($nIdUsuario   =   0) : $nIdUsuario;
+
+        //  Transacciones
+        try 
+        {
+            DB::beginTransaction();
+
+            // Mecanismo procedimiento almacenado
+            $respuesta  =   DB::select('call sp_Usuario_setEliminarPermisosByUsuario (?)', [
+                $nIdUsuario
+            ]);
+
+            $listPermisos       =       $request->listPermisosFilter;
+            $listPermisosSize   =       sizeof($listPermisos);
+
+            if ($listPermisosSize > 0) 
+            {            
+                foreach ($listPermisos as $key => $value)
+                {
+                    if ($value['checked'] == true) {
+                        // Mecanismo procedimiento almacenado
+                        $respuesta  =   DB::select('call sp_Usuario_setRegistrarPermisosByUsuario (?, ?)', [
+                            $nIdUsuario,
+                            $value['id']
+                        ]);
+                    }
+                }
+            }
+            
+            DB::commit();
+            $respuesta['success'] = true;
+            return json_encode($respuesta);
+        }
+        catch (Exception $e)
+        {
+            // captura algún error ocurrido dentro del bloque "try"
+            DB::rollBack();
+            $respuesta['success'] = false;
+            $respuesta['error'] = $e;
+            return json_encode($respuesta);
+        }
     }
 }
