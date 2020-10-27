@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Administracion;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -52,7 +53,7 @@ class UsersController extends Controller
         $cApellido      = $request->cApellido;
         $cUsuario       = $request->cUsuario;
         $cCorreo        = $request->cCorreo;
-        $cContrasena    = $request->cContrasena;
+        $cContrasena    = Hash::make($request->cContrasena);
         $oFotografia    = $request->oFotografia;
 
         //echo "foto: $oFotografia";
@@ -211,9 +212,11 @@ class UsersController extends Controller
         if (!$request->ajax()) return redirect('/');
 
         $nIdUsuario  = $request->nIdUsuario;
-        $nIdUsuario  = ($nIdUsuario  == NULL) ? ($nIdUsuario   =   0) : $nIdUsuario;
+        //$nIdUsuario  = ($nIdUsuario  == NULL) ? ($nIdUsuario   =   0) : $nIdUsuario;
         
-
+        if (!$nIdUsuario  || $nIdUsuario == NULL || $nIdUsuario == "") {
+            $nIdUsuario =  Auth::id();
+        }
         /**
          * Obtener los permisos que tiene ese rol  por usuario
          */
@@ -271,5 +274,34 @@ class UsersController extends Controller
             $respuesta['error'] = $e;
             return json_encode($respuesta);
         }
+    }
+
+    /**
+     * @param {Request} peticion
+     * 
+     * Funcion que permite obtener los permisos según el rol 
+     * y el usuario autenticado
+     */
+    public function getListarRolPermisosByUsuario(Request $request)
+    {
+        if (!$request->ajax()) return redirect('/');
+
+        $nIdUsuario  = $request->nIdUsuario;
+
+        if (!$nIdUsuario  || $nIdUsuario == NULL || $nIdUsuario == "") {
+            $nIdUsuario =  Auth::id();
+        }
+
+        $nIdUsuario  = ($nIdUsuario  == NULL) ? ($nIdUsuario   =   0) : $nIdUsuario;
+        
+        /**
+         * Obtener los permisos que tiene ese rol  por usuario
+         */
+        // Mecanismo procedimiento almacenado
+        $respuesta  =     DB::select('call sp_Usuario_getListarRolPermisosByUsuario (?)', [
+            $nIdUsuario
+        ]);
+
+        return $respuesta;             
     }
 }

@@ -295,7 +295,15 @@ export default {
                      var nIdFile = response.data[0].nIdFile
                      this.setGuardarUsuario(nIdFile)
                  })
-                 .catch(err => console.log("error"))
+                 .catch(error => {
+                    console.log("error::::")
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
+                })
         },
         
         setGuardarUsuarioSinFotografia()
@@ -377,7 +385,7 @@ export default {
                 }
             }).then( response => {
                 console.log(response.data)
-                this.fillEditarUsuario.mIdRol       =     (response.data.length == 0) ? '' : response.data[0].nIdRol;
+                this.fillEditarUsuario.mIdRol  =  (response.data.length == 0) ? '' : response.data[0].nIdRol;
                 this.fullscreenLoading = false;
             }).catch(error => {
                 console.log(error)
@@ -410,16 +418,25 @@ export default {
                 'oFotografia'       : nIdFile
             }).then( respuesta => {
                 console.log("registro editado exitosamente")
-                setEditarRolByUsuario()
+                this.setEditarRolByUsuario();
                 this.fullscreenLoading = false;   
                 // position: 'top-end',
+                
                 Swal.fire({                    
                     icon: 'success',
                     title: 'Se actualizó el usuario correctamente',
                     showConfirmButton: false,
                     timer: 1500
                 })         
-            }).catch( error => console.log(error))
+            }).catch(error => {
+                console.log("error::::")
+                if (error.response.status == 401) {
+                    this.$router.push({name: 'login'})
+                    location.reload();
+                    sessionStorage.clear();
+                    this.fullscreenLoading = false;
+                }
+            })
         },        
     },
 

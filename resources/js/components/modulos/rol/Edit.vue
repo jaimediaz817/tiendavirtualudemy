@@ -118,23 +118,9 @@
                                             <h5>No se encontraron resultados...</h5>
                                         </div>
                                     </template>
-                                    <div class="card-footer clearfix">
-                                        <!-- <ul class="pagination pagination-sm m-0 float-right">
-                                            <li class="page-item" v-if="pageNumber > 0">
-                                                <a href="#" class="page-link" @click.prevent="prevPage">Ant</a>
-                                            </li>
-                                            <li 
-                                                class="page-item" 
-                                                v-for="(page, index) in pagesList" :key="index" 
-                                                @click.prevent="selectCurrentPage(page)"
-                                                :class="[page == pageNumber ? 'active' : '']"
-                                            >
-                                                <a href="#" class="page-link">{{ page + 1 }}</a>
-                                            </li>
-                                            <li class="page-item" v-if="pageNumber < pageCount - 1">
-                                                <a href="#" class="page-link" @click.prevent="nextPage">Sig</a>
-                                            </li>
-                                        </ul> -->
+
+                                    <div class="card-footer">
+       
                                     </div>
                                 </div>
 
@@ -196,6 +182,9 @@ export default {
             // ERRORES
             error: 0,
             mensajeError: [],
+
+            listRolPermisosByUsuario: [],
+            listRolPermisosByUsuarioFilter: [],
         }
     },
     computed: {
@@ -219,17 +208,17 @@ export default {
                 'cSlug'              : this.fillEditarRol.cSlug,
                 'listPermisosFilter' : this.listPermisosFilter
             }).then( respuesta => {
-                console.log("registro creado exitosamente")
-                this.fullscreenLoading = false;
-                //this.$router.push('/rol');
-
-                Swal.fire({                    
-                    icon: 'success',
-                    title: 'Se actualizó correctamente los roles y permisos',
-                    showConfirmButton: false,
-                    timer: 1500
-                })                       
-            }).catch( error => console.log(error))
+                console.log("registro creado exitosamente");
+                this.getListarRolPermisosByUsuario();                  
+            }).catch(error => {
+                console.log("error::::")
+                if (error.response.status == 401) {
+                    this.$router.push({name: 'login'})
+                    location.reload();
+                    sessionStorage.clear();
+                    this.fullscreenLoading = false;
+                }
+            })
         },
 
         limpiarFormulario ()
@@ -288,6 +277,14 @@ export default {
                 console.log(":::::::::::::::::: data permissions By Role: ::::::::::::::::: ", this.listPermisos)
                 this.listPermisos = response.data;
                 this.filterPermisosByRol();                
+            }).catch(error => {
+                console.log("error::::")
+                if (error.response.status == 401) {
+                    this.$router.push({name: 'login'})
+                    location.reload();
+                    sessionStorage.clear();
+                    this.fullscreenLoading = false;
+                }
             })
         },
 
@@ -309,6 +306,8 @@ export default {
         marcarFila(index)
         {
             this.listPermisosFilter[index].checked     =    !this.listPermisosFilter[index].checked;
+            console.log("### CLICK ### ", this.listPermisosFilter);
+            console.log("....................................................");
         },
 
         getListarRoles() 
@@ -327,14 +326,67 @@ export default {
                 this.fillEditarRol.cSlug    =   response.data[0].slug;
                 this.fullscreenLoading      =   false;
             }).catch(error => {
-                console.log(error)
+                console.log("error::::")
+                if (error.response.status == 401) {
+                    this.$router.push({name: 'login'})
+                    location.reload();
+                    sessionStorage.clear();
+                    this.fullscreenLoading = false;
+                }
             })
         },
+
+        // Traido desde el componente de Login.vue
+        getListarRolPermisosByUsuario()        
+        {
+            var ruta = '/administracion/usuario/getListarRolPermisosByUsuario'
+            axios.get(ruta).then( response => {
+                this.listRolPermisosByUsuario = [];
+                this.listRolPermisosByUsuario = response.data;
+                this.filterListarRolPermisosByUsuario();
+            }).catch(error => {
+                console.log("error::::")
+                if (error.response.status == 401) {
+                    this.$router.push({name: 'login'})
+                    location.reload();
+                    sessionStorage.clear();
+                    this.fullscreenLoading = false;
+                }
+            })
+        },  
+
+        filterListarRolPermisosByUsuario()
+        {
+            var me = this;
+            me.listRolPermisosByUsuarioFilter = [];
+            me.listRolPermisosByUsuario.map( function(x, y){
+                me.listRolPermisosByUsuarioFilter.push(x.slug)
+            });
+
+            sessionStorage.removeItem('listRolPermisosByUsuario');
+            sessionStorage.clear();
+            sessionStorage.setItem('listRolPermisosByUsuario', 
+                JSON.stringify(me.listRolPermisosByUsuarioFilter)
+            );
+
+            // TODO: event-emit
+            console.log("emitiendo evento: ",  me.listRolPermisosByUsuarioFilter.length)
+            EventBus.$emit('notifyRolPermisosByUsuario', me.listRolPermisosByUsuarioFilter);
+            this.fullscreenLoading = false;
+
+            Swal.fire({                    
+                icon: 'success',
+                title: 'Se actualizó correctamente los roles y permisos',
+                showConfirmButton: false,
+                timer: 1500
+            })                 
+        },         
     },
     mounted()
     {
         this.getListarRoles();
         this.getListarPermisosByRol();
+        // this.getListarRolPermisosByUsuario(); 
     },
 }
 </script>

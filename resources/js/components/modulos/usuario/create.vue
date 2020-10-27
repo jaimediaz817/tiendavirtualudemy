@@ -246,8 +246,15 @@ export default {
                  .then( response => {
                      var nIdFile = response.data[0].nIdFile
                      this.setGuardarUsuario(nIdFile)
-                 })
-                 .catch(err => console.log("error"))
+                 }).catch(error => {
+                    console.log("error::::")
+                    if (error.response.status == 401) {
+                        this.$router.push({name: 'login'})
+                        location.reload();
+                        sessionStorage.clear();
+                        this.fullscreenLoading = false;
+                    }
+                })
         },
 
         setGuardarUsuario(nIdFile)
@@ -257,7 +264,7 @@ export default {
                 'cPrimerNombre'     : this.fillCrearUsuario.cPrimerNombre,
                 'cSegundoNombre'    : this.fillCrearUsuario.cSegundoNombre,
                 'cApellido'         : this.fillCrearUsuario.cApellidos,
-                'cuUsuario'         : this.fillCrearUsuario.cUsuario,
+                'cUsuario'          : this.fillCrearUsuario.cUsuario,
                 'cCorreo'           : this.fillCrearUsuario.cCorreo,
                 'cContrasena'       : this.fillCrearUsuario.cContrasena,
                 'oFotografia'       : nIdFile
@@ -280,7 +287,15 @@ export default {
 
                 console.log("set rol al usuario creado")
                 this.$router.push('/usuario')
-            }).catch( error => console.log(error))            
+            }).catch(error => {
+                console.log("error::::")
+                if (error.response.status == 401) {
+                    this.$router.push({name: 'login'})
+                    location.reload();
+                    sessionStorage.clear();
+                    this.fullscreenLoading = false;
+                }
+            })            
         },
 
         setGuardarUsuarioSinFotografia()
@@ -359,7 +374,13 @@ export default {
                 this.listRoles = response.data;
                 this.fullscreenLoading = false;
             }).catch(error => {
-                console.log(error)
+                console.log("error::::")
+                if (error.response.status == 401) {
+                    this.$router.push({name: 'login'})
+                    location.reload();
+                    sessionStorage.clear();
+                    this.fullscreenLoading = false;
+                }
             })
         },        
     },

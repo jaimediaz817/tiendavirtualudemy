@@ -351,3 +351,51 @@ php artisan make:model Permission
 - Habilito en el fichero de DatabaseSeeder el seeder creado y ejecutamos:
 [COMANDO]:
 php artisan db:seed
+
+
+### CAMBIAR NOMBRE DE COLUMNA EN TABLA (CHANGE COLUMN)
+[COMANDO]:
+php artisan make:migration rename_permission_id_in_roles_permissions_table --table=roles_permissions
+
+- Instalar lo siguiente:
+[COMANDO]:
+composer require doctrine/dbal
+
+
+### BORRAR CACHE:
+[COMANDOS]:
+php artisan config:cache
+php artisan config:clear
+
+
+
+
+UPDATE migrations SET migration ='2020_07_25_223225_create_users_permissions_table' WEHERE id = '6'
+
+2020_07_25_223225_create_users_persmissions_table
+
+
+
+
+## CREACION DEL MODELO FILE
+- lo creamos:
+[COMANDO]:
+php artisan make:model File
+
+## POR SI DA PROBLEMAS EL ENLACE SIMBOLICO:
+
+- ELIMINAMOS LA CARPETA STORAGE Y POSTERIORMENTE EJECUTAR EL COMANDO:
+[COMADNO]:
+php artisan storage:link
+
+
+
+
+### SESIONES EN LARAVEL - TIEMPO DE VIDA DE LA APLICACION EN LARAVEL - TIEMPO
+- ubicado dentro de la carpeta 
+http / config / session
+
+- posteriormente escribimos el comando para refrescar las variables cacheadas:
+[COMANDO]:
+php artisan config:cache
+

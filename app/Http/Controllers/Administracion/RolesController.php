@@ -126,17 +126,13 @@ class RolesController extends Controller
 
         // TODO: test
         // echo "nIDrOL: $nIdRol , cNombre: $cNombre, cSlug: $cSlug";
-        // var_dump($request); exit;
-
+        // exit;
 
         //  Transacciones
         try 
         {
-
-
             // echo "nIDrOL: $nIdRol , cNombre: $cNombre, cSlug: $cSlug";
             // var_dump($request); exit;
-            
             
             DB::beginTransaction();
 
@@ -147,12 +143,14 @@ class RolesController extends Controller
                 $cSlug    
             ]);
 
-
             $listPermisos       =       $request->listPermisosFilter;
             $listPermisosSize   =       sizeof($listPermisos);
 
             if ($listPermisosSize > 0) 
-            {            
+            {     
+                // var_dump($listPermisos);
+                // echo "817 :::::::::::::::";
+                //exit;
                 foreach ($listPermisos as $key => $value)
                 {
                     if ($value['checked'] == true) {

@@ -20,6 +20,10 @@ window.Vue.use(ElementUI);
 import Swal from 'sweetalert2'
 window.Swal = Swal;
 
+// TODO: agregar EventBus
+export const EventBus = new Vue();
+window.EventBus = EventBus;
+
 
 /**
  * The following block of code may be used to automatically register your
@@ -33,6 +37,9 @@ window.Swal = Swal;
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('App', require('./components/App.vue').default);
+
+// TODO: -jid- registrando un nuevo componente:
+Vue.component('Auth', require('./components/Auth.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

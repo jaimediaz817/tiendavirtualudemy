@@ -194,6 +194,10 @@ export default {
             // ERRORES
             error: 0,
             mensajeError: [],
+
+            // TRAIDOS DESDE LOGIN
+            listRolPermisosByUsuario: [],
+            listRolPermisosByUsuarioFilter: [],
         }
     },
     computed: {
@@ -209,6 +213,14 @@ export default {
                 }
             }).then( response => {
                 this.listPermisosByRolAsignado = response.data;
+            }).catch(error => {
+                console.log("error::::")
+                if (error.response.status == 401) {
+                    this.$router.push({name: 'login'})
+                    location.reload();
+                    sessionStorage.clear();
+                    this.fullscreenLoading = false;
+                }
             })
         },
 
@@ -220,10 +232,19 @@ export default {
                     'nIdUsuario': this.fillPermiso.nIdUsuario
                 }
             }).then( response => {
-                console.log("inicial: response.data: ", response)
+                console.log("### Permission - component - inicial: response.data: ", response)
+                this.listPermisos = [];
                 this.listPermisos = response.data;
                 this.filterPermisosByUsuario();
                 console.log("data permissions By Role: ", this.listPermisos)
+            }).catch(error => {
+                console.log("error::::")
+                if (error.response.status == 401) {
+                    this.$router.push({name: 'login'})
+                    location.reload();
+                    sessionStorage.clear();
+                    this.fullscreenLoading = false;
+                }
             })
         },  
 
@@ -237,25 +258,24 @@ export default {
             }
 
             this.fullscreenLoading = true;
+            console.log("list permisos filter: ",this.listPermisosFilter);
+            var url = '/administracion/usuario/setRegistrarPermisosByUsuario';
 
-            console.log("list permisos filter: ",this.listPermisosFilter)
-
-            var url = '/administracion/usuario/setRegistrarPermisosByUsuario'
             axios.post(url, {
                 'nIdUsuario'            : this.fillPermiso.nIdUsuario,
                 'listPermisosFilter'    : this.listPermisosFilter
             }).then( respuesta => {
-                console.log("registro creado exitosamente")
-                this.fullscreenLoading = false;
+                this.getListarRolPermisosByUsuario(true);
+            }).catch(error => {
+                console.log("error::::")
+                if (error.response.status == 401) {
+                    this.$router.push({name: 'login'})
+                    location.reload();
+                    sessionStorage.clear();
+                    this.fullscreenLoading = false;
+                }
+            })
 
-                Swal.fire({                    
-                    icon: 'success',
-                    title: 'Se otorgaron los permisos al usuario correctamente',
-                    showConfirmButton: false,
-                    timer: 1500
-                }) 
-
-            }).catch( error => console.log(error))
         },
 
         limpiarFormulario ()
@@ -333,11 +353,69 @@ export default {
                 this.fillPermiso.cNombreRol = (response.data.length == 0) ? '' : response.data[0].name;
                 this.fullscreenLoading = false;
             }).catch(error => {
-                console.log(error)
-            })            
+                console.log("error::::")
+                if (error.response.status == 401) {
+                    this.$router.push({name: 'login'})
+                    location.reload();
+                    sessionStorage.clear();
+                    this.fullscreenLoading = false;
+                }
+            })         
         },
-    },
 
+        // Traido desde el componente de Login.vue
+        getListarRolPermisosByUsuario(mostrarAlerta = true)        
+        {
+            //getListarPermisosByUsuario  
+            // var ruta = '/administracion/usuario/getListarRolPermisosByUsuario';
+            var ruta = '/administracion/usuario/getListarPermisosByUsuario';
+
+            axios.get(ruta).then( response => {
+                console.log("### Permission - component - inicial: response.data: PERMISOS", response.data)
+                this.listRolPermisosByUsuario = response.data;
+                this.filterListarRolPermisosByUsuario(mostrarAlerta);
+            }).catch(error => {
+                console.log("error::::")
+                if (error.response.status == 401) {
+                    this.$router.push({name: 'login'})
+                    location.reload();
+                    sessionStorage.clear();
+                    this.fullscreenLoading = false;
+                }
+            })
+        },  
+
+        filterListarRolPermisosByUsuario(mostrarAlerta)
+        {
+            var me = this;
+            me.listRolPermisosByUsuarioFilter = [];
+
+            me.listRolPermisosByUsuario.map( function(x, y){
+                if (x.checked == 1 || x.checked == true) {
+                    me.listRolPermisosByUsuarioFilter.push(x.slug)
+                }
+            });
+
+            sessionStorage.removeItem('listRolPermisosByUsuario');
+            sessionStorage.setItem('listRolPermisosByUsuario', 
+                JSON.stringify(me.listRolPermisosByUsuarioFilter)
+            );
+
+            // TODO: event-emit
+            EventBus.$emit('notifyRolPermisosByUsuario', me.listRolPermisosByUsuarioFilter);
+            console.log("registro creado exitosamente")
+            this.fullscreenLoading = false;
+
+            if (mostrarAlerta) {
+                Swal.fire({                    
+                    icon: 'success',
+                    title: 'Se otorgaron los permisos al usuario correctamente',
+                    showConfirmButton: false,
+                    timer: 1500
+                });   
+            }
+        },       
+    },
 
     // MONTADO
     mounted()
@@ -345,6 +423,7 @@ export default {
         this.getListarPermisosByRolAsignado();
         this.getRolByUsuario();
         this.getListarPermisosByUsuario();
+        this.getListarRolPermisosByUsuario(false);
     },
 }
 </script>

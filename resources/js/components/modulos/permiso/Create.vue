@@ -151,7 +151,15 @@ export default {
             }).then( respuesta => {
                 this.fullscreenLoading = false;
                 this.$router.push('/permiso');
-            }).catch( error => console.log(error))
+            }).catch(error => {
+                console.log("error::::")
+                if (error.response.status == 401) {
+                    this.$router.push({name: 'login'})
+                    location.reload();
+                    sessionStorage.clear();
+                    this.fullscreenLoading = false;
+                }
+            })
         },
 
         limpiarFormulario ()

@@ -5,7 +5,7 @@
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        <Sidebar :ruta="ruta" />
+        <Sidebar :ruta="ruta" :usuario="authUser" :listPermisos="listRolPermisosByUsuario" />
         <!-- Content Wrapper. Contains page content -->
 
         <!-- Content -->
@@ -31,11 +31,34 @@
     import Sidebar from './plantilla/Sidebar'
     import Footer from './plantilla/Footer'
     export default {
-        props: ['ruta'],
+        props: ['ruta', 'usuario'],
+        data() {
+            return {
+                authUser: this.usuario,
+                listRolPermisosByUsuario: [],
+            }
+        },
         components: {
             NavBar,
             Sidebar,
             Footer
+        },
+
+        mounted() {
+            console.log("### APP.VUE ### SESSION STORATE: ", JSON.parse(sessionStorage.getItem('listRolPermisosByUsuario')));
+            this.listRolPermisosByUsuario = JSON.parse(sessionStorage.getItem('listRolPermisosByUsuario'));
+
+            // TODO: event-listener
+            EventBus.$on('verifyAuthenticatedUser', data => {
+                console.log("### TEST APP.VUE ### : ", data);
+                this.authUser = data;
+            });
+
+            EventBus.$on('notifyRolPermisosByUsuario', data => {
+                console.log("actualizando la data from APP:: ", data.length);
+                this.listRolPermisosByUsuario = [];
+                this.listRolPermisosByUsuario = data;                
+            });
         }
     }
 </script>

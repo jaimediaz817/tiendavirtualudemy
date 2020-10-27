@@ -32,8 +32,24 @@ class User extends Authenticatable
      * The attributes that should be cast to native types.
      *
      * @var array
-     */
+     */    
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // TODO: agregamos el mutador como una propiedad más del objeto:
+    protected $appends = ['fullname'];
+
+    // TODO: mutadores:
+    public function getFullNameAttribute()
+    {
+        return "{$this->firstname} {$this->lastname}";
+    }
+
+    // Definiendo relaciones
+    public function file()
+    {
+        // modelo al que se irá a relacionar y campo por el cual se dá la relación
+        return $this->belongsTo(File::class, 'file_id');
+    }
 }

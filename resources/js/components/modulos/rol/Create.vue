@@ -220,7 +220,15 @@ export default {
                 console.log("registro creado exitosamente")
                 this.fullscreenLoading = false;
                 this.$router.push('/rol');
-            }).catch( error => console.log(error))
+            }).catch(error => {
+                console.log("error::::")
+                if (error.response.status == 401) {
+                    this.$router.push({name: 'login'})
+                    location.reload();
+                    sessionStorage.clear();
+                    this.fullscreenLoading = false;
+                }
+            })
         },
 
         limpiarFormulario ()
@@ -275,6 +283,14 @@ export default {
                 this.listPermisos = response.data;
                 this.filterPermisosByRol();
                 console.log("data permissions By Role: ", this.listPermisos)
+            }).catch(error => {
+                console.log("error::::")
+                if (error.response.status == 401) {
+                    this.$router.push({name: 'login'})
+                    location.reload();
+                    sessionStorage.clear();
+                    this.fullscreenLoading = false;
+                }
             })
         },
 

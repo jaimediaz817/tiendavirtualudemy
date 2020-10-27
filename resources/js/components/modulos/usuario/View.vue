@@ -39,9 +39,10 @@
                             </div>
                             <!-- INFO -->
                             <h3 class="profile-username text-center">
-                                {{ fillVerUsuario.cPrimerNombre + ' ' + fillVerUsuario.cSegundoNombre + ' ' + fillVerUsuario.cApellido }}
+                                <!-- {{ fillVerUsuario.cPrimerNombre + ' ' + fillVerUsuario.cSegundoNombre + ' ' + fillVerUsuario.cApellido }} -->
+                                {{ compCNombreCompleto }}
                             </h3>
-                            <p class="text-muted text-center">Vendedor</p>
+                            <p class="text-muted text-center"> {{ fillVerUsuario.cNombreRol }} </p>
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -221,6 +222,7 @@ export default {
                 cContrasena    : '',
                 oFotografia    : '',
                 cRutaArchivo   : '',
+                cNombreRol     : '',
             }, 
 
             // NEGOCIO
@@ -246,6 +248,7 @@ export default {
         // con base en el id Pasado.
         console.log("mounthed");
         this.getUsuarioById ();
+        this.getRolByUsuario();
     },
     computed: {
         compCNombreCompleto()
@@ -357,18 +360,61 @@ export default {
                 'cContrasena'       : this.fillEditarUsuario.cContrasena,
                 'oFotografia'       : nIdFile
             }).then( respuesta => {
-                console.log("registro editado exitosamente")
+                console.log("registro editado exitosamente");
+                
+                if (nIdFile  != 0) {
+                    this.getRefrescarUsuarioAutenticado();   
+                } else {
+                    this.fullscreenLoading = false;   
+                    this.getUsuarioById();
+
+                    Swal.fire({                    
+                        icon: 'success',
+                        title: 'Se actualizó el usuario correctamente',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });  
+                }
+                
+                // this.fullscreenLoading = false;   
+                // this.getUsuarioById();
+
+                // Swal.fire({                    
+                //     icon: 'success',
+                //     title: 'Se actualizó el usuario correctamente',
+                //     showConfirmButton: false,
+                //     timer: 1500
+                // });
+
+            }).catch( error => console.log(error))
+        },
+
+        getRefrescarUsuarioAutenticado() {
+            var url = '/authenticate/getRefrescarUsuarioAutenticado';
+
+            axios.get(url).then(response =>{                
+                console.log("### VIEW ### : ", response.data);
+
+                EventBus.$emit('verifyAuthenticatedUser', response.data);
+
                 this.fullscreenLoading = false;   
                 this.getUsuarioById();
-                // position: 'top-end',
 
                 Swal.fire({                    
                     icon: 'success',
                     title: 'Se actualizó el usuario correctamente',
                     showConfirmButton: false,
                     timer: 1500
-                })         
-            }).catch( error => console.log(error))
+                });
+            }).catch(error => {
+                console.log("error::::")
+                if (error.response.status == 401) {
+                    this.$router.push({name: 'login'})
+                    location.reload();
+                    sessionStorage.clear();
+                    this.fullscreenLoading = false;
+                }
+            })
         },
 
         limpiarFormulario ()
@@ -416,8 +462,33 @@ export default {
             }
 
             return this.error
-        }
+        },
 
+        // TODO: refactorizaciones
+        getRolByUsuario()
+        {
+            this.fullscreenLoading = true;
+            var url = '/administracion/usuario/getRolByUsuario'
+
+            axios.get(url, {
+                params: {
+                    'nIdUsuario'    :   this.fillVerUsuario.nIdUsuario
+                }
+            }).then( response => {                
+                //this.fillVerUsuario.nIdRol  =  (response.data.length == 0) ? '' : response.data[0].nIdRol;
+                console.log("resp metodo refactorizado: ", response.data)
+                this.fillVerUsuario.cNombreRol = (response.data.length == 0) ? '' : response.data[0].name;
+                this.fullscreenLoading = false;
+            }).catch(error => {
+                console.log("error::::")
+                if (error.response.status == 401) {
+                    this.$router.push({name: 'login'})
+                    location.reload();
+                    sessionStorage.clear();
+                    this.fullscreenLoading = false;
+                }
+            })         
+        },        
     }    
 }
 </script>

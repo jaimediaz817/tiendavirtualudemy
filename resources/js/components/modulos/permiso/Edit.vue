@@ -158,7 +158,15 @@ export default {
                     showConfirmButton: false,
                     timer: 1500
                 })   
-            }).catch( error => console.log(error))
+            }).catch(error => {
+                console.log("error::::")
+                if (error.response.status == 401) {
+                    this.$router.push({name: 'login'})
+                    location.reload();
+                    sessionStorage.clear();
+                    this.fullscreenLoading = false;
+                }
+            })
         },
 
         limpiarFormulario ()
@@ -209,7 +217,13 @@ export default {
                 this.fillEditarPermiso.cSlug = response.data[0].slug
                 this.fullscreenLoading = false;
             }).catch(error => {
-                console.log(error)
+                console.log("error::::")
+                if (error.response.status == 401) {
+                    this.$router.push({name: 'login'})
+                    location.reload();
+                    sessionStorage.clear();
+                    this.fullscreenLoading = false;
+                }
             })
         },        
     },

@@ -14,10 +14,12 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-tools">
-                        <router-link class="btn btn-info btn-sm" :to="'/rol/crear'">
-                            <i class="fas fa-plus-square"></i>
-                            Nuevo Rol
-                        </router-link>
+                        <template v-if="listRolPermisosByUsuario.includes('rol.crear')">
+                            <router-link class="btn btn-info btn-sm" :to="{ name: 'rol.crear'}">
+                                <i class="fas fa-plus-square"></i>
+                                Nuevo Rol
+                            </router-link>
+                        </template>
                     </div>
                 </div>
                 <div class="card-body">
@@ -90,21 +92,24 @@
                                                         :to="{ name: 'rol.ver', params: { id: item.id }}"
                                                     >
                                                         <i class="fas fa-folder"></i> Ver                                                 
-                                                    </router-link> -->                                                
-                                                    <button 
-                                                        class="btn btn-flat btn-primary btn-sm"
-                                                        @click.prevent="abrirModalByOption('rol', 'ver', item)"
-                                                    >
-                                                        <i class="fas fa-folder"></i> Ver
-                                                    </button>                                                
-
-                                                    <!-- EDITAR -->
-                                                    <router-link 
-                                                        class="btn btn-flat btn-info btn-sm" 
-                                                        :to="{ name: 'rol.editar', params: { id: item.id }}"
-                                                    >
-                                                        <i class="fas fa-pencil-alt"></i> Editar.                                        
-                                                    </router-link>                                                
+                                                    </router-link> -->        
+                                                    <template v-if="listRolPermisosByUsuario.includes('rol.ver')">
+                                                        <button 
+                                                            class="btn btn-flat btn-primary btn-sm"
+                                                            @click.prevent="abrirModalByOption('rol', 'ver', item)"
+                                                        >
+                                                            <i class="fas fa-folder"></i> Ver
+                                                        </button>                                                
+                                                    </template>                                        
+                                                    <template v-if="listRolPermisosByUsuario.includes('rol.editar')">
+                                                        <!-- EDITAR -->
+                                                        <router-link 
+                                                            class="btn btn-flat btn-info btn-sm" 
+                                                            :to="{ name: 'rol.editar', params: { id: item.id }}"
+                                                        >
+                                                            <i class="fas fa-pencil-alt"></i> Editar.                                        
+                                                        </router-link>
+                                                    </template>                                     
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -265,6 +270,7 @@ export default {
             fullscreenLoading: false,
             listRoles: [],
             listPermisos: [],
+            listRolPermisosByUsuario: JSON.parse(sessionStorage.getItem('listRolPermisosByUsuario')),
             pageNumber: 0,
             perPage: 5,
 
@@ -366,7 +372,13 @@ export default {
                 this.listRoles = response.data;
                 this.fullscreenLoading = false;
             }).catch(error => {
-                console.log(error)
+                console.log("error::::")
+                if (error.response.status == 401) {
+                    this.$router.push({name: 'login'})
+                    location.reload();
+                    sessionStorage.clear();
+                    this.fullscreenLoading = false;
+                }
             })
         },
 
@@ -411,6 +423,14 @@ export default {
                 this.listPermisos   = response.data;                
                 this.modalShow      = true;
                 this.modalOption    = 2;
+            }).catch(error => {
+                console.log("error::::")
+                if (error.response.status == 401) {
+                    this.$router.push({name: 'login'})
+                    location.reload();
+                    sessionStorage.clear();
+                    this.fullscreenLoading = false;
+                }
             })
         },        
 

@@ -14,10 +14,12 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-tools">
-                        <router-link class="btn btn-info btn-sm" :to="'/permiso/crear'">
-                            <i class="fas fa-plus-square"></i>
-                            Nuevo Permiso
-                        </router-link>
+                        <template v-if="listRolPermisosByUsuario.includes('permiso.crear')">
+                            <router-link class="btn btn-info btn-sm" :to="{ name: 'permiso.crear' }">
+                                <i class="fas fa-plus-square"></i>
+                                Nuevo Permiso
+                            </router-link>
+                        </template>
                     </div>
                 </div>
                 <div class="card-body">
@@ -84,13 +86,15 @@
                                                 <td v-text="item.name"></td>
                                                 <td v-text="item.slug"></td>
                                                 <td>
-                                                    <!-- EDITAR -->
-                                                    <router-link 
-                                                        class="btn btn-flat btn-info btn-sm" 
-                                                        :to="{ name: 'permiso.editar', params: { id: item.id }}"
-                                                    >
-                                                        <i class="fas fa-pencil-alt"></i> Editar.                                        
-                                                    </router-link>                                                
+                                                    <template v-if="listRolPermisosByUsuario.includes('permiso.editar')">
+                                                        <!-- EDITAR -->
+                                                        <router-link 
+                                                            class="btn btn-flat btn-info btn-sm" 
+                                                            :to="{ name: 'permiso.editar', params: { id: item.id }}"
+                                                        >
+                                                            <i class="fas fa-pencil-alt"></i> Editar.                                        
+                                                        </router-link>                                                                                                        
+                                                    </template>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -138,6 +142,7 @@ export default {
             },
             fullscreenLoading: false,
             listPermisos: [],
+            listRolPermisosByUsuario: JSON.parse(sessionStorage.getItem('listRolPermisosByUsuario')),
             pageNumber: 0,
             perPage: 5,         
         }
@@ -225,7 +230,13 @@ export default {
                 this.listPermisos = response.data;
                 this.fullscreenLoading = false;
             }).catch(error => {
-                console.log(error)
+                console.log("error::::")
+                if (error.response.status == 401) {
+                    this.$router.push({name: 'login'})
+                    location.reload();
+                    sessionStorage.clear();
+                    this.fullscreenLoading = false;
+                }
             })
         },
 
@@ -255,6 +266,14 @@ export default {
                 this.listPermisos   = response.data;                
                 this.modalShow      = true;
                 this.modalOption    = 2;
+            }).catch(error => {
+                console.log("error::::")
+                if (error.response.status == 401) {
+                    this.$router.push({name: 'login'})
+                    location.reload();
+                    sessionStorage.clear();
+                    this.fullscreenLoading = false;
+                }
             })
         },        
     },
