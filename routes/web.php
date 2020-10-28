@@ -57,6 +57,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     // guardar Archivo
     Route::post('/archivo/setRegistrarArchivo', 'FilesController@setRegistrarArchivo');
+
+    // modulo para CATEGORIAS
+    Route::get('/configuracion/categoria/getListarCategorias', 'Configuracion\CategoriaController@getListarCategorias');
 });
 
 

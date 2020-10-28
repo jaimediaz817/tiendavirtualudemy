@@ -55,6 +55,7 @@ class UsersController extends Controller
         $cCorreo        = $request->cCorreo;
         $cContrasena    = Hash::make($request->cContrasena);
         $oFotografia    = $request->oFotografia;
+        $nIdAuthUser    =   Auth::id();
 
         //echo "foto: $oFotografia";
 
@@ -70,14 +71,15 @@ class UsersController extends Controller
         // exit(0);
 
         // Mecanismo procedimiento almacenado
-        $respuesta  =   DB::select('call sp_Usuario_setRegistrarUsuario (?, ?, ?, ?, ?, ?, ?)', [
+        $respuesta  =   DB::select('call sp_Usuario_setRegistrarUsuario (?, ?, ?, ?, ?, ?, ?, ?)', [
             $cPrimerNombre,
             $cSegundoNombre,
             $cApellido,                  
             $cUsuario,
             $cCorreo,      
             $cContrasena,
-            $oFotografia
+            $oFotografia,
+            $nIdAuthUser
         ]);
 
         return $respuesta[0]->nIdUsuario;
@@ -94,6 +96,7 @@ class UsersController extends Controller
         $cUsuario       = $request->cUsuario;
         $cCorreo        = $request->cCorreo;
         $cContrasena    = $request->cContrasena;
+        $nIdAuthUser    = Auth::id();
 
         if ($cContrasena != NULL) 
         {
@@ -118,7 +121,7 @@ class UsersController extends Controller
         //exit(0);
 
         // Mecanismo procedimiento almacenado
-        $respuesta  =     DB::select('call sp_Usuario_setEditarUsuario (?, ?, ?, ?, ?, ?, ?, ?)', [
+        $respuesta  =     DB::select('call sp_Usuario_setEditarUsuario (?, ?, ?, ?, ?, ?, ?, ?, ?)', [
             $nIdUsuario,
             $cPrimerNombre,
             $cSegundoNombre,
@@ -126,7 +129,8 @@ class UsersController extends Controller
             $cUsuario,
             $cCorreo,      
             $cContrasena,
-            $oFotografia
+            $oFotografia,
+            $nIdAuthUser
         ]);
 
         return $respuesta;
@@ -138,14 +142,16 @@ class UsersController extends Controller
 
         $nIdUsuario   =   $request->nIdUsuario;
         $cEstado      =   $request->cEstado;
+        $nIdAuthUser  = Auth::id();
 
         $nIdUsuario   =   ($nIdUsuario  == NULL) ? ($nIdUsuario   =   0) :  $nIdUsuario;
         $cEstado      =   ($cEstado     == NULL) ? ($cEstado      =   0) :  $cEstado;
 
         // Mecanismo procedimiento almacenado
-        $respuesta  =     DB::select('call sp_Usuario_setCambiarEstadoUsuario (?, ?)', [
+        $respuesta  =     DB::select('call sp_Usuario_setCambiarEstadoUsuario (?, ?, ?)', [
             $nIdUsuario,
             $cEstado,
+            $nIdAuthUser
         ]);
 
         return $respuesta;        
@@ -158,6 +164,7 @@ class UsersController extends Controller
 
         $nIdUsuario     = $request->nIdUsuario;
         $nIdRol         = $request->nIdRol;
+        $nIdAuthUser    = Auth::id();
 
         $nIdUsuario     = ($nIdUsuario      == NULL) ? ($nIdUsuario         =   '') : $nIdUsuario;
         $nIdRol         = ($nIdRol          == NULL) ? ($nIdRol             =   '') : $nIdRol;    
