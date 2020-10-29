@@ -14,7 +14,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="card-tools">
-                    <template v-if="listCategorias.includes('categoria.crear')">
+                    <template v-if="listRolPermisosByUsuario.includes('categoria.crear')">
                         <router-link class="btn btn-info btn-sm" :to="{ name: 'categoria.crear' }">
                             <i class="fas fa-plus-square"></i>
                             Nueva Categoría
@@ -97,7 +97,7 @@
                                     <thead>
                                         <tr>
                                             <th>Nombre</th>
-                                            <th>Nombre</th>
+                                            <th>Descripción</th>
                                             <th>Descripcion</th>
                                         </tr>
                                     </thead>
@@ -106,8 +106,8 @@
                                             <td v-text="item.name"></td>
                                             <td v-text="item.description"></td>
                                             <td>
-                                                <template v-if="listCategorias.includes('categoria.editar')">
-                                                    <router-link class="btn btn-flat btn-info btn-sm" :to="{ name: 'categoria.editar', params: { id: user.id }}">
+                                                <template v-if="listRolPermisosByUsuario.includes('categoria.crear')">
+                                                    <router-link class="btn btn-flat btn-info btn-sm" :to="{ name: 'categoria.editar', params: { id: item.id }}">
                                                         <i class="fas fa-pencil-alt"></i> Editar.                                        
                                                     </router-link>
                                                 </template>  
@@ -272,7 +272,10 @@ export default {
         selectCurrentPage(page) {
             this.pageNumber = page;
         }
-    }   
+    },
+    mounted() {
+        this.getListarCategorias();
+    }
 }
 </script>
 

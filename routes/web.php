@@ -60,6 +60,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     // modulo para CATEGORIAS
     Route::get('/configuracion/categoria/getListarCategorias', 'Configuracion\CategoriaController@getListarCategorias');
+    Route::post('/configuracion/categoria/setRegistrarCategoria', 'Configuracion\CategoriaController@setRegistrarCategoria');
 });
 
 

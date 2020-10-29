@@ -43,6 +43,15 @@ export const rutas = [
         path: '/login', 
         name: 'login',
         component: require('./components/modulos/authenticate/Login').default,            
+        beforeEnter: (to, from, next) => {
+            let authUser = JSON.parse(sessionStorage.getItem('authUser'));
+            if (authUser) {
+                next({ name: 'dashboard.index' });
+            }
+            else {
+                next();
+            }            
+        }        
     },
 
     { 
@@ -160,6 +169,25 @@ export const rutas = [
             verificarAcceso(to, from, next);
         }            
     },
+
+    { 
+        path: '/categoria/crear', 
+        name: 'categoria.crear',
+        component: require('./components/modulos/categoria/Create').default,
+        beforeEnter: (to, from, next) => {
+            verificarAcceso(to, from, next);
+        }            
+    },
+
+    { 
+        path: '/categoria/editar/:id', 
+        name: 'categoria.editar',
+        component: require('./components/modulos/categoria/Edit').default,
+        props: true,
+        beforeEnter: (to, from, next) => {
+            verificarAcceso(to, from, next);
+        }            
+    },    
 
     { 
         path: '/producto', 

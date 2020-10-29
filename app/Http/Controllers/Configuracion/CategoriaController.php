@@ -30,4 +30,27 @@ class CategoriaController extends Controller
         ]);
         return $respuesta;
     }
+
+    public function setRegistrarCategoria(Request $request)
+    {
+        if (!$request->ajax()) {
+            return redirect('/');
+        }
+
+        $cNombre        =   $request->cNombre;
+        $cDescripcion   =   $request->cDescripcion;
+        $nIdAuthUser    =   Auth::id();
+
+        $cNombre        =   ($cNombre           == NULL) ? ($cNombre       =  '') : $cNombre;
+        $cDescripcion   =   ($cDescripcion      == NULL) ? ($cDescripcion  =  '') : $cDescripcion;
+
+
+        // Mecanismo procedimiento almacenado
+        $respuesta  =   DB::select('call sp_Categoria_setRegistrarCategoria (?, ?, ?)', [
+            $cNombre,
+            $cDescripcion,
+            $nIdAuthUser
+        ]);
+        return $respuesta;
+    }
 }
