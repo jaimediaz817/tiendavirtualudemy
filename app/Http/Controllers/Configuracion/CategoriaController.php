@@ -16,15 +16,18 @@ class CategoriaController extends Controller
             return redirect('/');
         }
 
+        $nIdCategoria   =   $request->nIdCategoria;
         $cNombre        =   $request->cNombre;
         $cDescripcion   =   $request->cDescripcion;
 
+        $nIdCategoria   =   ($nIdCategoria      == NULL) ? ($nIdCategoria  =   0) : $nIdCategoria;
         $cNombre        =   ($cNombre           == NULL) ? ($cNombre       =  '') : $cNombre;
         $cDescripcion   =   ($cDescripcion      == NULL) ? ($cDescripcion  =  '') : $cDescripcion;
 
 
         // Mecanismo procedimiento almacenado
-        $respuesta  =   DB::select('call sp_Categoria_getListarCategorias (?, ?)', [
+        $respuesta  =   DB::select('call sp_Categoria_getListarCategorias (?, ?, ?)', [
+            $nIdCategoria,
             $cNombre,
             $cDescripcion
         ]);
@@ -47,6 +50,31 @@ class CategoriaController extends Controller
 
         // Mecanismo procedimiento almacenado
         $respuesta  =   DB::select('call sp_Categoria_setRegistrarCategoria (?, ?, ?)', [
+            $cNombre,
+            $cDescripcion,
+            $nIdAuthUser
+        ]);
+        return $respuesta;
+    }
+
+    public function setEditarCategoria(Request $request)
+    {
+        if (!$request->ajax()) {
+            return redirect('/');
+        }
+        $nIdCategoria   =   $request->nIdCategoria;
+        $cNombre        =   $request->cNombre;
+        $cDescripcion   =   $request->cDescripcion;
+        $nIdAuthUser    =   Auth::id();
+
+        $nIdCategoria   =   ($nIdCategoria      == NULL) ? ($nIdCategoria  =   0) : $nIdCategoria;
+        $cNombre        =   ($cNombre           == NULL) ? ($cNombre       =  '') : $cNombre;
+        $cDescripcion   =   ($cDescripcion      == NULL) ? ($cDescripcion  =  '') : $cDescripcion;
+
+
+        // Mecanismo procedimiento almacenado
+        $respuesta  =   DB::select('call sp_Categoria_setEditarCategoria (?, ?, ?, ?)', [
+            $nIdCategoria,
             $cNombre,
             $cDescripcion,
             $nIdAuthUser

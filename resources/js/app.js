@@ -12,9 +12,14 @@ window.Vue = require('vue');
 //import Vue from 'vue';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+// Importando el idioma de Element:
+import locale from 'element-ui/lib/locale/lang/en'
+
 
 // TODO: para usarse globalmente anteponemos el nodo window:
-window.Vue.use(ElementUI);
+// Fixed:
+// #1 se agrega el idioma de elemento UI por defecto
+window.Vue.use(ElementUI, { locale });
 
 // TODO: sweet alert2
 import Swal from 'sweetalert2'

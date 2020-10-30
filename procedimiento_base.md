@@ -407,4 +407,11 @@ php artisan config:cache
 ### MODULO DE CATEGORIAS
 ----------------------------------------------------------------------------------------------
 
-- 
+- Creamos el controlador categorias:
+[COMANDO]:
+php artisan make:controller Configuracion\CategoriaController
+
+
+- Creamos el controlador Productos:
+[COMANDO]:
+php artisan make:controller Configuracion\ProductoController

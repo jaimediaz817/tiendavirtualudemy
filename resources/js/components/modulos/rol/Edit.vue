@@ -364,7 +364,6 @@ export default {
             });
 
             sessionStorage.removeItem('listRolPermisosByUsuario');
-            sessionStorage.clear();
             sessionStorage.setItem('listRolPermisosByUsuario', 
                 JSON.stringify(me.listRolPermisosByUsuarioFilter)
             );

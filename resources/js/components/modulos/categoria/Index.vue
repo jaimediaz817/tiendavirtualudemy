@@ -98,7 +98,7 @@
                                         <tr>
                                             <th>Nombre</th>
                                             <th>Descripción</th>
-                                            <th>Descripcion</th>
+                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -106,7 +106,7 @@
                                             <td v-text="item.name"></td>
                                             <td v-text="item.description"></td>
                                             <td>
-                                                <template v-if="listRolPermisosByUsuario.includes('categoria.crear')">
+                                                <template v-if="listRolPermisosByUsuario.includes('categoria.editar')">
                                                     <router-link class="btn btn-flat btn-info btn-sm" :to="{ name: 'categoria.editar', params: { id: item.id }}">
                                                         <i class="fas fa-pencil-alt"></i> Editar.                                        
                                                     </router-link>
