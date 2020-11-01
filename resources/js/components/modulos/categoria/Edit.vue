@@ -158,7 +158,7 @@ export default {
                     title: 'Se actualizó correctamente la categoría',
                     showConfirmButton: false,
                     timer: 1500
-                })                   
+                });                   
             }).catch(error => {
                 console.log("error::::")
                 if (error.response.status == 401) {

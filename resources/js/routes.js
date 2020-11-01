@@ -208,6 +208,16 @@ export const rutas = [
     },    
 
     { 
+        path: '/producto/editar/:id', 
+        name: 'producto.editar',
+        component: require('./components/modulos/producto/Edit').default,
+        props: true,
+        beforeEnter: (to, from, next) => {
+            verificarAcceso(to, from, next);
+        }            
+    },      
+
+    { 
         path: '/usuario', 
         name: 'usuario.index',
         component: require('./components/modulos/usuario/Index').default,

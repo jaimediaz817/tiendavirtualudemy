@@ -75,4 +75,38 @@ class ProductoController extends Controller
         ]);
         return $respuesta;
     }    
+
+    public function setEditarProducto(Request $request)
+    {
+        if (!$request->ajax()) {
+            return redirect('/');
+        }
+
+        $nIdProducto    =   $request->nIdProducto;
+        $cNombre        =   $request->cNombre;
+        $cDescripcion   =   $request->cDescripcion;
+        $nStock         =   $request->nStock;
+        $fPrice         =   $request->fPrecio;
+        $nIdCategoria   =   $request->nIdCategoria;
+        $nIdAuthUser    =   Auth::id();
+
+        $nIdProducto    =   ($nIdProducto       == NULL) ? ($nIdProducto   =  '') : $nIdProducto;
+        $cNombre        =   ($cNombre           == NULL) ? ($cNombre       =  '') : $cNombre;
+        $cDescripcion   =   ($cDescripcion      == NULL) ? ($cDescripcion  =  '') : $cDescripcion;
+        $nStock         =   ($nStock            == NULL) ? ($nStock        =   0) : $nStock;
+        $fPrice         =   ($fPrice            == NULL) ? ($fPrice        =   0) : $fPrice;
+        $nIdCategoria   =   ($nIdCategoria      == NULL) ? ($nIdCategoria  =  '') : $nIdCategoria;
+
+        // Mecanismo procedimiento almacenado
+        $respuesta  =   DB::select('call sp_Producto_setEditarProducto (?, ?, ?, ?, ?, ?, ?)', [
+            $nIdProducto,
+            $cNombre,
+            $cDescripcion,
+            $nStock,
+            $fPrice,
+            $nIdCategoria,
+            $nIdAuthUser
+        ]);
+        return $respuesta;
+    }
 }
