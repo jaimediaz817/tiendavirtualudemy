@@ -116,6 +116,9 @@ export default {
                 cSlug : '',
             },
 
+            listRolPermisosByUsuario: [],
+            listRolPermisosByUsuarioFilter: [],
+
             fullscreenLoading: false,
 
             // MODALES
@@ -157,7 +160,8 @@ export default {
                     title: 'Se actualizó correctamente el permiso',
                     showConfirmButton: false,
                     timer: 1500
-                })   
+                });
+                this.getListarRolPermisosByUsuario(false);
             }).catch(error => {
                 console.log("error::::")
                 if (error.response.status == 401) {
@@ -225,6 +229,54 @@ export default {
                     this.fullscreenLoading = false;
                 }
             })
+        },        
+
+        // Traido desde el componente de Login.vue
+        getListarRolPermisosByUsuario(showMessageInfo)        
+        {
+            var ruta = '/administracion/usuario/getListarRolPermisosByUsuario'
+            axios.get(ruta).then( response => {
+                this.listRolPermisosByUsuario = [];
+                this.listRolPermisosByUsuario = response.data;
+                this.filterListarRolPermisosByUsuario(showMessageInfo);
+            }).catch(error => {
+                console.log("error::::")
+                if (error.response.status == 401) {
+                    this.$router.push({name: 'login'})
+                    location.reload();
+                    sessionStorage.clear();
+                    this.fullscreenLoading = false;
+                }
+            })
+        },         
+
+        filterListarRolPermisosByUsuario(showMessageInfo)
+        {
+            var me = this;
+            me.listRolPermisosByUsuarioFilter = [];
+            me.listRolPermisosByUsuario.map( function(x, y){
+                me.listRolPermisosByUsuarioFilter.push(x.slug)
+            });
+
+            sessionStorage.removeItem('listRolPermisosByUsuario');
+            sessionStorage.setItem('listRolPermisosByUsuario', 
+                JSON.stringify(me.listRolPermisosByUsuarioFilter)
+            );
+
+            // TODO: event-emit
+            console.log("emitiendo evento: ",  me.listRolPermisosByUsuarioFilter.length)
+            EventBus.$emit('notifyRolPermisosByUsuario', me.listRolPermisosByUsuarioFilter);
+            this.fullscreenLoading = false;
+
+            if (showMessageInfo || showMessageInfo == true) 
+            {
+                Swal.fire({                    
+                    icon: 'success',
+                    title: 'Se actualizó correctamente los roles y permisos',
+                    showConfirmButton: false,
+                    timer: 1500
+                });                
+            }
         },        
     },
     mounted(){

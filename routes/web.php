@@ -65,6 +65,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Modulo para PRODUCTOS
     Route::get('/configuracion/producto/getListarProductos', 'Configuracion\ProductoController@getListarProductos');    
+    Route::post('/configuracion/producto/setRegistrarProducto', 'Configuracion\ProductoController@setRegistrarProducto');
 });
 
 

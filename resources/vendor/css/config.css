@@ -38,8 +38,13 @@
     list-style: none;
 }
 
-/* Tablas Scrolleables */
+/* Tablas Scrolleables */ 
 .scrollTable {
     max-height: 350px !important;
     overflow: auto !important;
+}
+
+/* input numbers */
+input.el-input__inner {
+    width: 100% !important;
 }

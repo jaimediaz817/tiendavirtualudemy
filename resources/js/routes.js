@@ -199,6 +199,15 @@ export const rutas = [
     },
 
     { 
+        path: '/producto/crear', 
+        name: 'producto.crear',
+        component: require('./components/modulos/producto/Create').default,
+        beforeEnter: (to, from, next) => {
+            verificarAcceso(to, from, next);
+        }            
+    },    
+
+    { 
         path: '/usuario', 
         name: 'usuario.index',
         component: require('./components/modulos/usuario/Index').default,

@@ -178,7 +178,7 @@ export default {
         validarRegistrarPermisos ()
         {
             this.error = 0
-            this.mensajeError = []
+            this.mensajeError = [] 
 
             if ( !this.fillCrearCategoria.cNombre ) {
                 this.mensajeError.push('El nombre es un campo obligatorio')
