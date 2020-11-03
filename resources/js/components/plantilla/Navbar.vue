@@ -5,24 +5,49 @@
 		  <li class="nav-item">
 			<a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
 		</li>
-		<li class="nav-item d-none d-sm-inline-block">
-			<a href="../../index3.html" class="nav-link">Home</a>
-		</li>
-		<li class="nav-item d-none d-sm-inline-block">
-			<a href="#" class="nav-link">Contact</a>
-		</li>
+
+        <template v-if="listPermisos.includes('dashboard.index')">
+            <li class="nav-item d-none d-sm-inline-block">
+                <router-link class="nav-link" :to="{ name: 'dashboard.index' }" >
+                    Inicio
+                </router-link>
+            </li>
+        </template>
+
+        <template v-if="listPermisos.includes('pedido.index')">
+            <li class="nav-item d-none d-sm-inline-block">
+                <router-link class="nav-link" :to="{ name: 'pedido.index' }" >
+                    Pedido
+                </router-link>
+            </li>
+        </template>
 	</ul>
 
 	<!-- SEARCH FORM -->
 	<form class="form-inline ml-3">
 		<div class="input-group input-group-sm">
-				<input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-					<div class="input-group-append">
-							<button class="btn btn-navbar" type="submit">
-									<i class="fas fa-search"></i>
-							</button>
-					</div>
-			</div>
+            <!-- class="inline-input" -->
+            <el-autocomplete                
+                popper-class="my-autocomplete"
+                v-model="cBusqueda"
+                :fetch-suggestions="querySearch"
+                placeholder="Buscar..."
+                :trigger-on-focus="true"
+                @select="handleSelect"
+                size="small"                
+            >
+                <i
+                    class="el-icon-search el-input__icon"
+                    slot="suffix">
+                </i>              
+            </el-autocomplete>     
+			<!-- <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search"> -->
+            <!-- <div class="input-group-append">
+                <button class="btn btn-navbar" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div> -->
+		</div>
 	</form>
 
     <!-- Right navbar links -->
@@ -131,10 +156,111 @@
 
 <script>
 export default {
-    props: ['ruta']
+    props: ['ruta', 'usuario', 'listPermisos'],
+    data() {
+        return {
+            links: [],
+            cBusqueda: '',
+            listRolPermisosByUsuario: [],
+            listRolPermisosByUsuarioFilter: [],
+        }
+    },
+
+    methods: {
+      querySearch(queryString, cb) {
+        var links = this.listRolPermisosByUsuarioFilter;
+        var results = queryString ? links.filter(this.createFilter(queryString)) : links;
+        // call callback function to return suggestions
+        cb(results);
+      },
+      createFilter(queryString) {
+        return (link) => {
+          return (link.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+        };
+      },
+      loadAll() {
+        return [
+          { "value": "vue", "link": "https://github.com/vuejs/vue" },
+          { "value": "element", "link": "https://github.com/ElemeFE/element" },
+          { "value": "cooking", "link": "https://github.com/ElemeFE/cooking" },
+          { "value": "mint-ui", "link": "https://github.com/ElemeFE/mint-ui" },
+          { "value": "vuex", "link": "https://github.com/vuejs/vuex" },
+          { "value": "vue-router", "link": "https://github.com/vuejs/vue-router" },
+          { "value": "babel", "link": "https://github.com/babel/babel" }
+         ];
+      },
+        handleSelect(item) {
+            if (this.$route.name != item.link) {
+                this.$router.push({name: item.link})
+                this.cBusqueda = ''
+            }
+            else
+            {
+                this.cBusqueda = ''
+            }
+        },
+
+        // Refactorizado
+        getListarRolPermisosByUsuario()
+        {
+            //var ruta = '/administracion/usuario/getListarRolPermisosByUsuario'
+            var ruta = '/administracion/usuario/getListarPermisosByUsuario';
+            axios.get(ruta, {
+                params: {
+                    'nIdUsuario': this.usuario.id
+                }
+            }).then( response => {
+                console.log("### Login - component - inicial: response.data: ", response)
+                this.listRolPermisosByUsuario = response.data;
+                this.filterListarRolPermisosByUsuario();
+            })
+        },        
+
+    
+        filterListarRolPermisosByUsuario()
+        {            
+            var me = this;
+            me.listRolPermisosByUsuarioFilter = [];
+
+            me.listRolPermisosByUsuario.map( function(x, y){
+                if (x.slug.includes('index')) {
+                     me.listRolPermisosByUsuarioFilter.push({
+                         'value'    :   x.name,
+                         'link'     :   x.slug
+                     });
+                }
+                // me.listRolPermisosByUsuarioFilter.push(x.slug);
+                
+            });
+        },            
+
+    },
+
+    mounted() 
+    {
+        EventBus.$on('notifyRolPermisosByUsuario', data => {
+            console.log("actualizando la data from APP:: ", data.length);
+            this.listRolPermisosByUsuario = [];
+            this.listRolPermisosByUsuario = data;                
+        });
+
+        // this.links = this.loadAll();
+        this.getListarRolPermisosByUsuario();
+    },
 }
 </script>
 
 <style>
-
+  .my-autocomplete li {
+      line-height: normal;
+      padding: 7px;
+  }      
+  .my-autocomplete li .value{
+        text-overflow: ellipsis;
+        overflow: hidden;      
+  }
+  .my-autocomplete li .link{
+        font-size: 12px;
+        color: #b4b4b4;
+  }
 </style>

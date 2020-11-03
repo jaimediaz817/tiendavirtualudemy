@@ -104,22 +104,6 @@ export default {
             })
         },
 
-        // Refactorizado
-        getListarRolPermisosByUsuario(authUser)
-        {
-            //var ruta = '/administracion/usuario/getListarRolPermisosByUsuario'
-            var ruta = '/administracion/usuario/getListarPermisosByUsuario';
-            axios.get(ruta, {
-                params: {
-                    'nIdUsuario': authUser.id
-                }
-            }).then( response => {
-                console.log("### Login - component - inicial: response.data: ", response)
-                this.listRolPermisosByUsuario = response.data;
-                this.filterListarRolPermisosByUsuario(authUser);
-            })
-        },
-
         loginSuccess(){
             this.$router.push({ name: 'dashboard.index'});
             location.reload();
@@ -158,6 +142,23 @@ export default {
             return this.error;
         },
 
+        // Refactorizado
+        getListarRolPermisosByUsuario(authUser)
+        {
+            //var ruta = '/administracion/usuario/getListarRolPermisosByUsuario'
+            var ruta = '/administracion/usuario/getListarPermisosByUsuario';
+            axios.get(ruta, {
+                params: {
+                    'nIdUsuario': authUser.id
+                }
+            }).then( response => {
+                console.log("### Login - component - inicial: response.data: ", response)
+                this.listRolPermisosByUsuario = response.data;
+                this.filterListarRolPermisosByUsuario(authUser);
+            })
+        },        
+
+    
         filterListarRolPermisosByUsuario(authUser)
         {            
             var me = this;
