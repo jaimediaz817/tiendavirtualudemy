@@ -48,3 +48,12 @@
 input.el-input__inner {
     width: 100% !important;
 }
+
+.col-md-12 div.el-autocomplete {
+    width: 100%;
+}
+
+/* VUESAX COMPONENTE */
+input#vs-input--28 {
+    width: 100%;
+}

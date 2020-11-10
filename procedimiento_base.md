@@ -415,3 +415,16 @@ php artisan make:controller Configuracion\CategoriaController
 - Creamos el controlador Productos:
 [COMANDO]:
 php artisan make:controller Configuracion\ProductoController
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------
+###     VUESAX
+----------------------------------------------------------------------------------------------
+
+[COMANDO]:
+npm install vuesax@next
+

@@ -21,9 +21,22 @@ import locale from 'element-ui/lib/locale/lang/en'
 // #1 se agrega el idioma de elemento UI por defecto
 window.Vue.use(ElementUI, { locale });
 
+
+/**
+ * Vuesax - biblioteca para interfaz de usuario
+ */
+import Vuesax from 'vuesax'
+import 'vuesax/dist/vuesax.css' //Vuesax styles
+Vue.use(Vuesax, {
+  // options here
+})
+
+
 // TODO: sweet alert2
 import Swal from 'sweetalert2'
 window.Swal = Swal;
+
+
 
 // TODO: agregar EventBus
 export const EventBus = new Vue();

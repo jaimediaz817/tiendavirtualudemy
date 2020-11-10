@@ -72,6 +72,12 @@ export const rutas = [
         }
     },  
 
+    { 
+        path: '/pedido/crear', 
+        name: 'pedido.crear',
+        component: require('./components/modulos/pedido/Create').default,            
+    },      
+
     // { 
     //     path: '/categoria', 
     //     name: 'categoria.index',

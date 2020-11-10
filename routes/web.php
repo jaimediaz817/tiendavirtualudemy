@@ -72,6 +72,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Modulo para OPERACIONES
     Route::get('/operacion/pedido/getListarPedidos', 'Operacion\OrdersController@getListarPedidos');    
+    Route::get('/operacion/cliente/getListarClientes', 'Operacion\CustomersController@getListarClientes');
+    Route::post('/operacion/cliente/setRegistrarCliente', 'Operacion\CustomersController@setRegistrarCliente');
     
 });
 
