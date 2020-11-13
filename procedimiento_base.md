@@ -428,3 +428,14 @@ php artisan make:controller Configuracion\ProductoController
 [COMANDO]:
 npm install vuesax@next
 
+
+### ALTERAR MIGRACIONES - CREAR COLUMNA NUEVA - CREAR NUEVO CAMPO - CREAR CAMPO NUEVO - ALTERAR CAMPO
+- Para ello creamos una nueva miracion:
+[COMANDO]:
+
+php artisan make:migration change_details_order_datatype --table=details_orders
+php artisan migrate
+
+
+### TRIGGERS
+- estar atentos a alguna accion de escritura antes o despues de la misma.
