@@ -14,21 +14,35 @@
 
                 <form method="post">
                     <div class="input-group mb-3">
-                        <input v-model="fillLogin.cEmail" @keyup.enter="login" type="email" class="form-control" placeholder="Email">
+
+                        <vs-input :state="(error) ? 'danger':''" v-model="fillLogin.cEmail" icon-after placeholder="Email" @keyup.enter="login">
+                            <template #icon>
+                            <i class='fas fa-envelope'></i>
+                            </template>
+                        </vs-input>
+
+                        <!-- <input v-model="fillLogin.cEmail" @keyup.enter="login" type="email" class="form-control" placeholder="Email">
                         <div class="input-group-append">
                             <div class="input-group-text">
                             <span class="fas fa-envelope"></span>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
 
                     <div class="input-group mb-3">
-                        <input v-model="fillLogin.cContrasena" @keyup.enter="login" type="password" class="form-control" placeholder="Password">
+
+                        <vs-input :state="(error) ? 'danger':''" v-model="fillLogin.cContrasena" @keyup.enter="login" icon-after placeholder="Contraseña">
+                            <template #icon>
+                            <i class='fas fa-lock'></i>
+                            </template>
+                        </vs-input>
+                        
+                        <!-- <input v-model="fillLogin.cContrasena" @keyup.enter="login" type="password" class="form-control" placeholder="Password">
                         <div class="input-group-append">
                             <div class="input-group-text">
                             <span class="fas fa-lock"></span>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
 
             
@@ -49,7 +63,8 @@
                 </div>
 
                 <div class="social-auth-links text-center mb-3">
-                    <button class="btn btn-flat btn-block btn-danger" @click.prevent="login" v-loading.fullscreen.lock="fullscreenLoading">
+                    <!-- v-loading.fullscreen.lock="fullscreenLoading" -->
+                    <button class="btn btn-flat btn-block btn-danger" @click.prevent="login" >
                         Iniciar sesión
                     </button>
                 </div>
@@ -75,15 +90,25 @@ export default {
             mensajeError: [],
             listRolPermisosByUsuario: [],
             listRolPermisosByUsuarioFilter: [],
+            oLoading: null,
         }
     },
     methods: {
         login() {
+            // background: '#7a76cb'
+            const loading = this.$vs.loading({
+                type: 'gradient',
+                color: '#d5397b',
+            });
+
+            this.oLoading = loading;
+
             if (this.validarLogin()) {
+                this.stopLoading();
                 return;
             }
 
-            this.fullscreenLoading = true;
+            // this.fullscreenLoading = true;
             var url = "/authenticate/login";
 
             axios.post(url, {
@@ -100,8 +125,19 @@ export default {
                     this.getListarRolPermisosByUsuario(response.data.authUser);
                 }
 
-                this.fullscreenLoading = false;
+                // this.fullscreenLoading = false;
+                // LAOADER VUESAX
+                setTimeout(() => {
+                    loading.close()
+                }, 3000)                
             })
+        },
+
+        stopLoading() {
+            // LAOADER VUESAX
+            setTimeout(() => {
+                this.oLoading.close()
+            }, 3000)   
         },
 
         loginSuccess(){
@@ -188,5 +224,7 @@ export default {
 </script>
 
 <style>
-
+    .vs-input-parent.vs-input-parent--state-null.vs-component--primary, input.vs-input, .vs-input-content, .vs-input-parent {
+        width: 100%;
+    }
 </style>
