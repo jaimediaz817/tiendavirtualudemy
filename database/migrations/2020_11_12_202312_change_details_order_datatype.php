@@ -15,6 +15,7 @@ class ChangeDetailsOrderDatatype extends Migration
     public function up()
     {
         Schema::table('details_orders', function (Blueprint $table) {
+            // modificando el tipo de dato
             DB::statement("ALTER TABLE details_orders MODIFY price DOUBLE");
         });
     }
@@ -27,7 +28,7 @@ class ChangeDetailsOrderDatatype extends Migration
     public function down()
     {
         Schema::table('details_orders', function (Blueprint $table) {
-            //
+            // revirtiendo los cambios a como estaba antes
             DB::statement("ALTER TABLE details_orders MODIFY price SMALLINT");
         });
     }

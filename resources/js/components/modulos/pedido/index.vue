@@ -121,10 +121,11 @@
                                             <td v-text="item.cliente"></td>
                                             <td v-text="item.total"></td>
                                             <td v-text="item.vendedor"></td>
+                                            <td v-text="item.estado"></td>
                                             <td>
                                                 <template v-if="listRolPermisosByUsuario.includes('pedido.ver')">
                                                     <!-- Boton para desactivar estado -->
-                                                    <button class="btn btn-flat btn-info btn-sm">
+                                                    <button class="btn btn-flat btn-info btn-sm" @click.prevent="setGenerarDocumento(item.pedido)">
                                                         <i class="far fa-file-pdf"></i> Ver PDF
                                                     </button>                                                      
                                                     <!-- <router-link class="btn btn-flat btn-info btn-sm" :to="{ name: 'pedido.ver', params: { id: item.id }}">
@@ -176,7 +177,9 @@
 </template>
 
 <script>
+import { mixinUtilidades } from "./../../../mixins/mixins";
 export default {
+    mixins: [mixinUtilidades],
     data(){
         return {
             fillBusquedaPedido: {
@@ -305,10 +308,50 @@ export default {
         },
         selectCurrentPage(page) {
             this.pageNumber = page;
-        }
+        },
+
+        // FUNCIONALIDADES EXTRA : VER PDF
+        setGenerarDocumento(nIdPedido) {
+            //
+            this.activarLoaderCustom();
+            var url = '/operacion/pedido/setGenerarDocumento';
+
+            console.log("nIdPedido::: ", nIdPedido)
+
+            // Configurando data-type
+            var config = {
+                responseType: 'blob'
+            };
+
+
+            axios.post(url, {
+                'nIdPedido'       :   nIdPedido
+            }, config)
+            .then( response => {                
+                console.log(response.data);
+                // Formatear respuesta a Blob - Javascript
+                var blobPdf = new Blob([response.data], {type: 'application/pdf'}); // the blob
+
+                // Renderizamos el Blob:
+                var url = URL.createObjectURL(blobPdf);
+                window.open(url);
+
+                this.pausarLoaderCustom();
+            }).catch(error => {
+                if (error.response.status == 401) {
+                    this.$router.push({name: 'login'})
+                    location.reload();
+                    sessionStorage.clear();
+                    this.pausarLoaderCustom();
+                }
+            });
+        },
     },
     mounted() {
-        this.getListarPedidos();        
+        this.getListarPedidos();   
+        console.log("mixins: ", this.activarLoaderCustom())     
+
+        this.pausarLoaderCustom();
     }
 }
 </script>

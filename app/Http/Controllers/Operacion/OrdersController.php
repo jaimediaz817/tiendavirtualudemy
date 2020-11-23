@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Operacion;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Exception;
-use Illuminate\Support\Facades\Auth;
+use PDF;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class OrdersController extends Controller
 {
@@ -100,6 +101,21 @@ class OrdersController extends Controller
             //echo "ojo:::::::::::::::::";
 
         }
+    }
+
+    public function setGenerarDocumento(Request $request) 
+    {    
+        if (!$request->ajax()) return redirect('/');
+
+        $nIdPedido       =   $request->nIdPedido;
+        $respuesta  =   DB::select('call sp_Pedido_getPedido (?)', [
+            $nIdPedido
+        ]);        
+
+        $pdf = PDF::loadView('reportes.pedido.pdf.ver', [
+            'respuesta' => $respuesta
+        ]);
+        return $pdf->download('invoice.pdf');        
     }
 
 

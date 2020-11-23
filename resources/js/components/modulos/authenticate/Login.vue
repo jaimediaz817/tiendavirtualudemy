@@ -78,7 +78,11 @@
 </template>
 
 <script>
+
+import { mixinUtilidades } from "./../../../mixins/mixins";
+
 export default {
+    mixins: [mixinUtilidades],
     data() {
         return {
             fillLogin: {
@@ -96,12 +100,13 @@ export default {
     methods: {
         login() {
             // background: '#7a76cb'
-            const loading = this.$vs.loading({
-                type: 'gradient',
-                color: '#d5397b',
-            });
+            // const loading = this.$vs.loading({
+            //     type: 'gradient',
+            //     color: '#d5397b',
+            // });
 
-            this.oLoading = loading;
+            // this.oLoading = loading;
+            this.activarLoaderCustom(false);
 
             if (this.validarLogin()) {
                 this.stopLoading();
@@ -127,9 +132,10 @@ export default {
 
                 // this.fullscreenLoading = false;
                 // LAOADER VUESAX
-                setTimeout(() => {
-                    loading.close()
-                }, 3000)                
+                // setTimeout(() => {
+                //     loading.close()
+                // }, 3000)     
+                this.pausarLoaderCustom(false);           
             })
         },
 

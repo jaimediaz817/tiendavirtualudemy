@@ -31,6 +31,11 @@ Vue.use(Vuesax, {
   // options here
 })
 
+/**
+ * Mixins Globales
+ */
+
+
 
 // TODO: sweet alert2
 import Swal from 'sweetalert2'

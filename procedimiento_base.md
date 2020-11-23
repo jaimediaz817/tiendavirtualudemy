@@ -439,3 +439,16 @@ php artisan migrate
 
 ### TRIGGERS
 - estar atentos a alguna accion de escritura antes o despues de la misma.
+
+
+### DOM PDF - GENERAR PDF .
+- Criterio de búsqueda en google:
+laravel dom pdf
+
+[LINK]:
+https://github.com/barryvdh/laravel-dompdf
+
+[COMANDO]:
+composer require barryvdh/laravel-dompdf
+
+- Creamos una página blade dentro de resources => viewa => reportes => pedido => pdf => ver.blade.php

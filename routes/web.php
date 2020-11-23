@@ -75,7 +75,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/operacion/cliente/getListarClientes', 'Operacion\CustomersController@getListarClientes');
     Route::post('/operacion/cliente/setRegistrarCliente', 'Operacion\CustomersController@setRegistrarCliente');
     Route::post('/operacion/pedido/setRegistrarPedido', 'Operacion\OrdersController@setRegistrarPedido');
-    
+    // Generacion PDF - EXCEL    
+    Route::post('/operacion/pedido/setGenerarDocumento', 'Operacion\OrdersController@setGenerarDocumento');
 });
 
 
