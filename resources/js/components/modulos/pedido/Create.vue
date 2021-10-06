@@ -5,7 +5,7 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0 text-dark">Crear Pedido</h1>
-                </div><!-- /.col -->            
+                </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </div>
@@ -29,7 +29,7 @@
                                     <h3 class="card-title">{{ (switchCliente) ? 'Formulario Registrar Cliente' : 'Buscar' }}</h3>
                                 </div>
                                 <div class="card-body">
-                                    <form role="form">                                        
+                                    <form role="form">
                                         <div class="row">
 
                                             <div class="col-md-3">
@@ -58,20 +58,20 @@
                                                             </el-input>
                                                         </template>
                                                         <template v-else>
-                                                            <el-autocomplete                
+                                                            <el-autocomplete
                                                                 popper-class="inline-input"
                                                                 v-model="cBusqueda"
                                                                 :fetch-suggestions="querySearch"
                                                                 placeholder="Buscar..."
                                                                 :trigger-on-focus="true"
                                                                 @select="handleClienteSelect"
-                                                                size="medium"                
+                                                                size="medium"
                                                             >
                                                                 <i
                                                                     class="el-icon-search el-input__icon"
                                                                     slot="suffix">
-                                                                </i>              
-                                                            </el-autocomplete>  
+                                                                </i>
+                                                            </el-autocomplete>
                                                         </template>
                                                     </div>
                                                 </div>
@@ -105,20 +105,20 @@
                                                 <div class="form-group row">
                                                     <label class="col-md-12 col-form-label">Email</label>
                                                     <div class="col-md-12">
-                                                        <vs-input 
-                                                            v-model="fillCrearCliente.cCorreo" 
+                                                        <vs-input
+                                                            v-model="fillCrearCliente.cCorreo"
                                                             placeholder="correo@gmail.com"
                                                             :disabled="(switchCliente) ? false : true"
                                                         >
-                                                            <template 
-                                                                v-if="validEmail" 
-                                                                #message-success                                                                
+                                                            <template
+                                                                v-if="validEmail"
+                                                                #message-success
                                                             >Correo electrónico válido</template>
-                                                            <template 
-                                                                v-if="!validEmail && fillCrearCliente.cCorreo !== ''" 
+                                                            <template
+                                                                v-if="!validEmail && fillCrearCliente.cCorreo !== ''"
                                                                 #message-danger
                                                             >El correo electrónico no tiene el formato correcto</template>
-                                                        </vs-input>                                                        
+                                                        </vs-input>
                                                         <el-input
                                                             type="email"
                                                             placeholder="Ingrese el Correo Electrónico"
@@ -142,9 +142,9 @@
                                                         >
                                                         </el-input>
                                                     </div>
-                                                </div>                                                
+                                                </div>
 
-                                            </div>                        
+                                            </div>
                                         </div>
                                     </form>
 
@@ -152,8 +152,8 @@
                                 <div class="card-footer">
                                     <div class="row">
                                             pedidos list: {{ listPedidos.length }}
-                                            <button                                                
-                                                class="btn btn-flat btn-info btn-block" 
+                                            <button
+                                                class="btn btn-flat btn-info btn-block"
                                                 @click.prevent="setRegistrarPedido"
                                                 v-loading.fullscreen.lock="fullscreenLoading"
                                             >Registrar</button>
@@ -201,15 +201,15 @@
                                                 </thead>
 
                                                 <tbody>
-                                                    <tr 
-                                                        v-for="(item, index) in listPedidos" 
+                                                    <tr
+                                                        v-for="(item, index) in listPedidos"
                                                         :key="index"
                                                     >
                                                         <td>
                                                             <!-- Filterable: con base a lo escrito, vaya filtrando en el Selector -->
-                                                            <el-select 
+                                                            <el-select
                                                                 @change="obtenerProducto(item.nIdProducto, index)"
-                                                                v-model="item.nIdProducto" 
+                                                                v-model="item.nIdProducto"
                                                                 placeholder="Seleccione una Producto"
                                                                 clearable
                                                                 filterable
@@ -221,21 +221,21 @@
                                                                         :value="item.id"
                                                                     >
                                                                     </el-option>
-                                                            </el-select>                                                            
+                                                            </el-select>
                                                         </td>
                                                         <td>
-                                                            <el-input-number 
+                                                            <el-input-number
                                                                 v-model="item.nStock"
-                                                                :min="1" 
+                                                                :min="1"
                                                                 :max="(item.nIdProducto) ? item.nStockFlag : 1"
                                                                 controls-position="right"
                                                             >
-                                                            </el-input-number>                                                                
+                                                            </el-input-number>
                                                         </td>
                                                         <td v-text="item.fPrecio"></td>
                                                         <td>{{ item.fSubTotal = item.nStock * item.fPrecio }}</td>
                                                         <td>
-                                                            <el-tooltip 
+                                                            <el-tooltip
                                                                 class="item"
                                                                 effect="dark"
                                                                 content="Left Center prompts info"
@@ -250,11 +250,11 @@
                                                                 >
                                                                     <i class="fas fa-trash"></i>
                                                                 </vs-button>
-                                                            </el-tooltip> 
+                                                            </el-tooltip>
                                                         </td>
                                                     </tr>
                                                 </tbody>
-                                            </table>   
+                                            </table>
                                         </div>
 
                                         <el-row :gutter="20">
@@ -277,9 +277,9 @@
                                             <li class="page-item" v-if="pageNumber > 0">
                                                 <a href="#" class="page-link" @click.prevent="prevPage">Ant</a>
                                             </li>
-                                            <li 
-                                                class="page-item" 
-                                                v-for="(page, index) in pagesList" :key="index" 
+                                            <li
+                                                class="page-item"
+                                                v-for="(page, index) in pagesList" :key="index"
                                                 @click.prevent="selectCurrentPage(page)"
                                                 :class="[page == pageNumber ? 'active' : '']"
                                             >
@@ -301,14 +301,14 @@
     </div>
 
     <div class="modal fade" :class="{ show: modalShow }" :style=" modalShow ? mostrarModal : ocultarModal">
-        <div class="modal-dialog" role="document">            
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Sistema de Laravel y Vue</h5>
                     <button class="close" @click="abrirModal"></button>
                 </div>
                 <div class="modal-body">
-                    <div 
+                    <div
                         v-for="(item, index) in mensajeError" :key="index" v-text="item"
                         class="callout callout-danger"
                         style="padding: 5px"
@@ -326,20 +326,22 @@
 </template>
 
 <script>
+import { mixinUtilidades } from "./../../../mixins/mixins";
 export default {
+    mixins: [mixinUtilidades],
     data(){
-        return {            
+        return {
             links: [],
-            cBusqueda: '',            
+            cBusqueda: '',
             listRolPermisosByUsuario: [],
             listClientesFilter: [],
 
             cComentario: '',
             fTotalPedido: 0,
-            
-        
+
+
             fillCrearCliente: {
-                nIdCliente  : '',                
+                nIdCliente  : '',
                 cDocumento  : '',
                 cNombre  : '',
                 cApellido   : '',
@@ -385,17 +387,17 @@ export default {
 
         /**
          *  ### SETTERS
-        */        
+        */
 
-        setRegistrarPedido(){
-
+        setRegistrarPedido()
+        {
             if (this.validarRegistrarPedido()) {
                 this.modalShow = true;
-                return;                
+                return;
             }
 
             this.fullscreenLoading = true;
-                        
+
             if (this.switchCliente || this.switchCliente == true) {
                 this.setRegistrarCliente();
                 return;
@@ -486,17 +488,88 @@ export default {
                 'fTotalPedido'          : this.fTotalPedido,
                 'listPedido'            : this.listPedidos
             }).then( respuesta => {
-                this.fullscreenLoading = false;
-                this.$router.push('/pedido')
+                console.log(respuesta.data, " res ");
+                // Generar Doc
+                // this.setGenerarDocumento(respuesta.data);
+
+                // Enviar email
+                this.setGenerarEmail(respuesta.data);
+                // this.$router.push('/pedido');
             }).catch(error => {
-                console.log("error::::")
-                if (error.response.status == 401) {
+                console.log("error::::", error)
+                if (error.response && error.response.status == 401) {
                     this.$router.push({name: 'login'})
                     location.reload();
                     sessionStorage.clear();
                     this.fullscreenLoading = false;
                 }
             })
+        },
+
+        setGenerarEmail(nIdPedido)
+        {
+            // this.activarLoaderCustom();
+            this.fullscreenLoading = true;
+            var url = '/operacion/pedido/setGenerarEmail';
+            console.log("nIdPedido::: ", nIdPedido)
+            // Configurando data-type
+            var config = {
+                responseType: 'blob'
+            };
+
+            axios.post(url, {
+                'nIdPedido': nIdPedido
+            }, config)
+            .then( response => {
+                console.log(response.data);
+                this.setGenerarDocumento(nIdPedido)
+                this.fullscreenLoading = false;
+                // this.pausarLoaderCustom();
+            }).catch(error => {
+                console.log("error ::: ", error);
+                if (error.response && error.response.status == 401) {
+                    this.$router.push({name: 'login'})
+                    location.reload();
+                    sessionStorage.clear();
+                    // this.pausarLoaderCustom();
+                }
+            });
+        },
+
+        // FUNCIONALIDADES EXTRA : VER PDF
+        setGenerarDocumento(nIdPedido) {
+            //
+            this.activarLoaderCustom();
+            var url = '/operacion/pedido/setGenerarDocumento';
+
+            console.log("nIdPedido::: ", nIdPedido)
+
+            // Configurando data-type
+            var config = {
+                responseType: 'blob'
+            };
+
+            axios.post(url, {
+                'nIdPedido'       :   nIdPedido
+            }, config)
+            .then( response => {
+                console.log(response.data);
+                // Formatear respuesta a Blob - Javascript
+                var blobPdf = new Blob([response.data], {type: 'application/pdf'}); // the blob
+
+                // Renderizamos el Blob:
+                var url = URL.createObjectURL(blobPdf);
+                window.open(url);
+
+                this.pausarLoaderCustom();
+            }).catch(error => {
+                if (error.response && error.response.status == 401) {
+                    this.$router.push({name: 'login'})
+                    location.reload();
+                    sessionStorage.clear();
+                    this.pausarLoaderCustom();
+                }
+            });
         },
 
         limpiarFormulario ()
@@ -521,15 +594,15 @@ export default {
             {
                 if ( !this.fillCrearCliente.cDocumento ) {
                     this.mensajeError.push('El Documento es un campo obligatorio')
-                }   
-                                
+                }
+
                 if ( !this.fillCrearCliente.cNombre ) {
                     this.mensajeError.push('El Nombre es un campo obligatorio')
                 }
 
                 if ( !this.fillCrearCliente.cApellido ) {
                     this.mensajeError.push('El Apellido es un campo obligatorio')
-                }                
+                }
 
                 if (this.fillCrearCliente.cCorreo) {
                     if (!this.validEmail) {
@@ -592,7 +665,7 @@ export default {
                 //   return (link.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
                 return (link.value.toLowerCase().indexOf(queryString.toLowerCase()) != -1);
             };
-        },    
+        },
         handleClienteSelect(item) {
             let clienteSeleccionado = this.listClientes.filter(cliente => {
                 return ( (String(cliente.id)).indexOf(String(item.link)) != -1);
@@ -604,8 +677,8 @@ export default {
             this.fillCrearCliente.cNombre       =   clienteSeleccionado[0].name;
             this.fillCrearCliente.cApellido     =   clienteSeleccionado[0].lastname;
             this.fillCrearCliente.cCorreo       =   clienteSeleccionado[0].email;
-            this.fillCrearCliente.cTelefono     =   clienteSeleccionado[0].phone; 
-        },            
+            this.fillCrearCliente.cTelefono     =   clienteSeleccionado[0].phone;
+        },
 
 
         /**
@@ -630,7 +703,7 @@ export default {
                     this.fullscreenLoading = false;
                 }
             })
-        },  
+        },
 
         // Refactorizado
         getListarClientes()
@@ -650,11 +723,10 @@ export default {
                     this.fullscreenLoading = false;
                 }
             });
-        },        
+        },
 
-    
         filterListarClientes()
-        {            
+        {
             var me = this;
             me.listClientesFilter = [];
 
@@ -667,9 +739,9 @@ export default {
                 });
                 // }
             });
-        },   
+        },
 
-        limpiarCriterios() 
+        limpiarCriterios()
         {
             this.cBusqueda                      =   '';
             this.fillCrearCliente.nIdCliente    =   '';
@@ -680,9 +752,8 @@ export default {
             this.fillCrearCliente.cTelefono     =   '';
         },
 
-
         // OPERACIONES CON PRODUCTOS Y PEDIDOS
-        agregarProducto()        
+        agregarProducto()
         {
             let me = this;
 
@@ -693,7 +764,7 @@ export default {
                     'nStockFlag'    :   '',
                     'fPrecio'       :   '',
                     'fSubTotal'     :   '',
-                });                
+                });
             }
             else
             {
@@ -719,14 +790,14 @@ export default {
                         'nStockFlag'    :   '',
                         'fPrecio'       :   '',
                         'fSubTotal'     :   '',
-                    });                                        
-                }                
+                    });
+                }
             }
 
         },
 
-        obtenerProducto(nIdProducto, index) {
-
+        obtenerProducto(nIdProducto, index)
+        {
             let me = this;
             let contador = 0;
 
@@ -763,9 +834,9 @@ export default {
                 if (rpta[0].stock > 0) {
                     this.listPedidos[index].nStockFlag = rpta[0].stock;
                     this.listPedidos[index].nStock   =   rpta[0].stock;
-                    this.listPedidos[index].fPrecio  =   rpta[0].price;                                                          
+                    this.listPedidos[index].fPrecio  =   rpta[0].price;
                 } else {
-                    this.listPedidos[index].nIdProducto  =   '';   
+                    this.listPedidos[index].nIdProducto  =   '';
                     // NOTIFICACION :::
                     const noti = me.$vs.notification({
                         square: true,
@@ -773,7 +844,7 @@ export default {
                         position: 'bottom-right',
                         title: 'Alerta',
                         text: 'El Producto seleccionado no cuenta con Stock disponible'
-                    });                    
+                    });
                 }
             }
         },
@@ -799,12 +870,12 @@ export default {
     /* VUESAX COMPONENTE */
     input#vs-input--28 {
         width: 100%;
-    }    
+    }
 
     /* VUESAX COMPONENTE  - TOOLTIP */
     .vs-tooltip-content {
         width: min-content;
-    }    
+    }
 
 
     /* EKEMENT - UI - LAYOUT */
@@ -835,5 +906,5 @@ export default {
     .row-bg {
         padding: 10px 0;
         background-color: #f9fafc;
-    }    
+    }
 </style>

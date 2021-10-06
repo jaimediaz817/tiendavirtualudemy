@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-/* 
+/*
 
 */
 
@@ -43,7 +43,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get( '/administracion/usuario/getRolByUsuario', 'Administracion\UsersController@getRolByUsuario');
     Route::get( '/administracion/usuario/getListarPermisosByRolAsignado', 'Administracion\UsersController@getListarPermisosByRolAsignado');
     Route::get( '/administracion/usuario/getListarPermisosByUsuario', 'Administracion\UsersController@getListarPermisosByUsuario');
-    
+
 
 
     // ROLES    ****
@@ -66,17 +66,29 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/configuracion/categoria/setEditarCategoria', 'Configuracion\CategoriaController@setEditarCategoria');
 
     // Modulo para PRODUCTOS
-    Route::get('/configuracion/producto/getListarProductos', 'Configuracion\ProductoController@getListarProductos');    
+    Route::get('/configuracion/producto/getListarProductos', 'Configuracion\ProductoController@getListarProductos');
     Route::post('/configuracion/producto/setRegistrarProducto', 'Configuracion\ProductoController@setRegistrarProducto');
     Route::post('/configuracion/producto/setEditarProducto', 'Configuracion\ProductoController@setEditarProducto');
 
     // Modulo para OPERACIONES - PEDIDOS - CLIENTE
-    Route::get('/operacion/pedido/getListarPedidos', 'Operacion\OrdersController@getListarPedidos');    
+    Route::get('/operacion/pedido/getListarPedidos', 'Operacion\OrdersController@getListarPedidos');
     Route::get('/operacion/cliente/getListarClientes', 'Operacion\CustomersController@getListarClientes');
     Route::post('/operacion/cliente/setRegistrarCliente', 'Operacion\CustomersController@setRegistrarCliente');
+    Route::post('/operacion/cliente/setEditarCliente', 'Operacion\CustomersController@setEditarCliente');
     Route::post('/operacion/pedido/setRegistrarPedido', 'Operacion\OrdersController@setRegistrarPedido');
-    // Generacion PDF - EXCEL    
+    Route::post('/operacion/pedido/setCambiarEstadoPedido', 'Operacion\OrdersController@setCambiarEstadoPedido');
+    Route::post('/operacion/pedido/setGenerarEmail', 'Operacion\OrdersController@setGenerarEmail');
+
+    // GRAFICOS
+    Route::get('/dashboard/getProductosMasVendidos', 'DashboardController@getProductosMasVendidos');
+    Route::get('/dashboard/getVentasPorDia', 'DashboardController@getVentasPorDia');
+
+    // Generacion PDF - EXCEL
     Route::post('/operacion/pedido/setGenerarDocumento', 'Operacion\OrdersController@setGenerarDocumento');
+
+    // Chats
+    Route::get('/chat/getListarContactos', 'ChatsController@getListarContactos');
+
 });
 
 

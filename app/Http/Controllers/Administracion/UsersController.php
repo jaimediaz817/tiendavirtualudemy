@@ -55,17 +55,17 @@ class UsersController extends Controller
         $cCorreo        = $request->cCorreo;
         $cContrasena    = Hash::make($request->cContrasena);
         $oFotografia    = $request->oFotografia;
-        $nIdAuthUser    =   Auth::id();
+        $nIdAuthUser    = Auth::id();
 
         //echo "foto: $oFotografia";
 
-        $cPrimerNombre  = ($cPrimerNombre   == NULL) ? ($cPrimerNombre   =   '') : $cPrimerNombre;
-        $cApellido      = ($cApellido       == NULL) ? ($cApellido   =   '') : $cApellido;
-        $cSegundoNombre = ($cSegundoNombre  == NULL) ? ($cSegundoNombre   =   '') : $cSegundoNombre;
-        $cUsuario       = ($cUsuario        == NULL) ? ($cUsuario   =   '') : $cUsuario;
-        $cCorreo        = ($cCorreo         == NULL) ? ($cCorreo   =   '') : $cCorreo;
-        $cContrasena    = ($cContrasena     == NULL) ? ($cContrasena   =   '') : $cContrasena;
-        $oFotografia    = ($oFotografia     == NULL) ? ($oFotografia   =   NULL) : $oFotografia;
+        $cPrimerNombre  = ($cPrimerNombre   == NULL) ? ($cPrimerNombre      =   '')     : $cPrimerNombre;
+        $cApellido      = ($cApellido       == NULL) ? ($cApellido          =   '')     : $cApellido;
+        $cSegundoNombre = ($cSegundoNombre  == NULL) ? ($cSegundoNombre     =   '')     : $cSegundoNombre;
+        $cUsuario       = ($cUsuario        == NULL) ? ($cUsuario           =   '')     : $cUsuario;
+        $cCorreo        = ($cCorreo         == NULL) ? ($cCorreo            =   '')     : $cCorreo;
+        $cContrasena    = ($cContrasena     == NULL) ? ($cContrasena        =   '')     : $cContrasena;
+        $oFotografia    = ($oFotografia     == NULL) ? ($oFotografia        =   NULL)   : $oFotografia;
 
         // echo "foto: $oFotografia";
         // exit(0);

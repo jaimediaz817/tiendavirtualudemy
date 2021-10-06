@@ -355,7 +355,7 @@ export default {
                 'cPrimerNombre'     : this.fillEditarUsuario.cPrimerNombre,
                 'cSegundoNombre'    : this.fillEditarUsuario.cSegundoNombre,
                 'cApellido'         : this.fillEditarUsuario.cApellido,
-                'cUsuario'         : this.fillEditarUsuario.cUsuario,
+                'cUsuario'          : this.fillEditarUsuario.cUsuario,
                 'cCorreo'           : this.fillEditarUsuario.cCorreo,
                 'cContrasena'       : this.fillEditarUsuario.cContrasena,
                 'oFotografia'       : nIdFile

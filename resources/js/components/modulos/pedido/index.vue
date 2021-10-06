@@ -5,7 +5,7 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0 text-dark">Pedido</h1>
-                </div><!-- /.col -->            
+                </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </div>
@@ -62,30 +62,30 @@
                                         <div class="form-group row">
                                             <label class="col-md-3 col-form-label">Estado</label>
                                             <div class="col-md-9">
-                                                <el-select 
-                                                    v-model="fillBusquedaPedido.nIdEstado" 
+                                                <el-select
+                                                    v-model="fillBusquedaPedido.cEstado"
                                                     placeholder="Seleccione una Estado"
                                                     clearable
                                                 >
                                                         <el-option
                                                             v-for="item in listEstados"
                                                             :key="item.value"
-                                                            :label="item.name"
+                                                            :label="item.label"
                                                             :value="item.value"
                                                         >
                                                         </el-option>
                                                 </el-select>
                                             </div>
                                         </div>
-                                    </div>                                                                        
+                                    </div>
                                 </div>
                             </form>
                         </div>
                         <div class="card-footer">
                             <div class="row">
                                 <div class="col-md-4 offset-4">
-                                    <button 
-                                        class="btn btn-flat btn-info btnWidth" 
+                                    <button
+                                        class="btn btn-flat btn-info btnWidth"
                                         @click.prevent="getListarPedidos"
                                         v-loading.fullscreen.lock="fullscreenLoading"
                                     >Buscar</button>
@@ -121,28 +121,32 @@
                                             <td v-text="item.cliente"></td>
                                             <td v-text="item.total"></td>
                                             <td v-text="item.vendedor"></td>
-                                            <td v-text="item.estado"></td>
+                                            <td>
+                                                <span v-if="item.state == 'A'" class="badge badge-success" v-text="item.estado"></span>
+                                                <span v-else class="badge badge-danger" v-text="item.estado"></span>
+                                            </td>
+                                            <!-- <td v-text="item.estado"></td> -->
                                             <td>
                                                 <template v-if="listRolPermisosByUsuario.includes('pedido.ver')">
                                                     <!-- Boton para desactivar estado -->
                                                     <button class="btn btn-flat btn-info btn-sm" @click.prevent="setGenerarDocumento(item.pedido)">
                                                         <i class="far fa-file-pdf"></i> Ver PDF
-                                                    </button>                                                      
+                                                    </button>
                                                     <!-- <router-link class="btn btn-flat btn-info btn-sm" :to="{ name: 'pedido.ver', params: { id: item.id }}">
-                                                        <i class="far fa-file-pdf"></i> Ver PDF                  
+                                                        <i class="far fa-file-pdf"></i> Ver PDF
                                                     </router-link> -->
-                                                </template>  
+                                                </template>
 
                                                 <template v-if="listRolPermisosByUsuario.includes('pedido.rechazar')">
                                                     <!-- Boton para desactivar estado -->
-                                                    <button class="btn btn-flat btn-danger btn-sm">
+                                                    <button v-if="item.state == 'A'" class="btn btn-flat btn-danger btn-sm" @click.prevent="setCambiarEstadoPedido(1, item.id)">
                                                         <i class="fas fa-trash"></i> Rechazar
                                                     </button>
-                                                </template>                                                  
+                                                </template>
                                             </td>
                                         </tr>
                                     </tbody>
-                                </table>                                    
+                                </table>
                             </template>
                             <template v-else>
                                 <div class="callout callout-info">
@@ -154,9 +158,9 @@
                                     <li class="page-item" v-if="pageNumber > 0">
                                         <a href="#" class="page-link" @click.prevent="prevPage">Ant</a>
                                     </li>
-                                    <li 
-                                        class="page-item" 
-                                        v-for="(page, index) in pagesList" :key="index" 
+                                    <li
+                                        class="page-item"
+                                        v-for="(page, index) in pagesList" :key="index"
                                         @click.prevent="selectCurrentPage(page)"
                                         :class="[page == pageNumber ? 'active' : '']"
                                     >
@@ -172,7 +176,7 @@
                 </div>
             </div>
         </div>
-    </div>    
+    </div>
 </div>
 </template>
 
@@ -186,14 +190,14 @@ export default {
                 cNombre  : '',
                 cDocumento : '',
                 cPedido : '',
-                nIdEstado: ''
+                cEstado: ''
             },
             fullscreenLoading: false,
             listPedidos: [],
             listEstados: [
                 {value: 'A', label: 'Activo'},
-                {value: 'B', label: 'Inactivo'},
-            ],            
+                {value: 'I', label: 'Inactivo'},
+            ],
             listRolPermisosByUsuario: JSON.parse(sessionStorage.getItem('listRolPermisosByUsuario')),
             pageNumber: 0,
             perPage: 5
@@ -261,7 +265,7 @@ export default {
             this.fillBusquedaPedido.cNombre     =  '';
             this.fillBusquedaPedido.cDocumento  =  '';
             this.fillBusquedaPedido.cPedido     =  '';
-            this.fillBusquedaPedido.nIdEstado   =  '';
+            this.fillBusquedaPedido.cEstado   =  '';
         },
 
         limpiarBandejaCategorias() {
@@ -269,7 +273,7 @@ export default {
         },
 
         // Listar los Productos del sistema con su info de Stock
-        getListarPedidos() 
+        getListarPedidos()
         {
             this.fullscreenLoading = true;
             var url = '/operacion/pedido/getListarPedidos'
@@ -279,7 +283,7 @@ export default {
                     'cNombre'       :   this.fillBusquedaPedido.cNombre,
                     'cDocumento'    :   this.fillBusquedaPedido.cDocumento,
                     'cPedido'       :   this.fillBusquedaPedido.cPedido,
-                    'nIdEstado'     :   this.fillBusquedaPedido.nIdEstado
+                    'cEstado'     :     this.fillBusquedaPedido.cEstado
                 }
             }).then( response => {
                 this.inicializarPaginacion();
@@ -327,7 +331,7 @@ export default {
             axios.post(url, {
                 'nIdPedido'       :   nIdPedido
             }, config)
-            .then( response => {                
+            .then( response => {
                 console.log(response.data);
                 // Formatear respuesta a Blob - Javascript
                 var blobPdf = new Blob([response.data], {type: 'application/pdf'}); // the blob
@@ -346,10 +350,51 @@ export default {
                 }
             });
         },
+
+        // Rechazar pedido:
+        setCambiarEstadoPedido(estado, idpedido)
+        {
+            // text: "You won't be able to revert this!",
+            Swal.fire({
+                title: '¿Está seguro de ' + ((estado == 1) ? 'rechazar' : 'activar') + ' el pedido?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: ((estado == 1) ? 'Si, Rechazar' : 'Si, activar'),
+                cancelButtonText: 'Cancelar operación'
+            }).then((result) => {
+                if (result.value) {
+                    // TODO: petición al servidor
+                    this.fullscreenLoading = true;
+                    var url = '/operacion/pedido/setCambiarEstadoPedido'
+                    axios.post(url, {
+                        'nIdPedido': idpedido,
+                        'cEstado'   : (estado == 1) ? 'I' : 'A'
+                    }).then( response => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Se ' + ((estado == 1) ? 'desativo' : 'activo') + ' el usuario',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        this.getListarPedidos();
+                    }).catch(error => {
+                        console.log("error::::")
+                        if (error.response.status == 401) {
+                            this.$router.push({name: 'login'})
+                            location.reload();
+                            sessionStorage.clear();
+                            this.fullscreenLoading = false;
+                        }
+                    })
+                }
+            })
+        },
     },
     mounted() {
-        this.getListarPedidos();   
-        console.log("mixins: ", this.activarLoaderCustom())     
+        this.getListarPedidos();
+        console.log("mixins: ", this.activarLoaderCustom())
 
         this.pausarLoaderCustom();
     }

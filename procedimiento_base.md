@@ -452,3 +452,13 @@ https://github.com/barryvdh/laravel-dompdf
 composer require barryvdh/laravel-dompdf
 
 - Creamos una página blade dentro de resources => viewa => reportes => pedido => pdf => ver.blade.php
+
+
+[ENVIAR EMAIL]
+php artisan make:mail PedidoCrear
+app/mail/
+
+
+[CHART JS]
+-instalación:
+npm install chart.js --save

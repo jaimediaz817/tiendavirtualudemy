@@ -25,24 +25,24 @@ function verificarAcceso(to, from, next) {
             });
 
             if (to.name == 'dashboard.index') {
-                next({ name: listRolPermisosByUsuarioFilter[0]});                
+                next({ name: listRolPermisosByUsuarioFilter[0]});
             } else {
                 next(from.path);
             }
-            
+
         }
     }
-    else 
+    else
     {
         next('/login');
     }
 }
 
 export const rutas = [
-    { 
-        path: '/login', 
+    {
+        path: '/login',
         name: 'login',
-        component: require('./components/modulos/authenticate/Login').default,            
+        component: require('./components/modulos/authenticate/Login').default,
         beforeEnter: (to, from, next) => {
             let authUser = JSON.parse(sessionStorage.getItem('authUser'));
             if (authUser) {
@@ -50,299 +50,318 @@ export const rutas = [
             }
             else {
                 next();
-            }            
-        }        
+            }
+        }
     },
 
-    { 
-        path: '/', 
+    {
+        path: '/',
         name: 'dashboard.index',
-        component: require('./components/modulos/dahsboard/Index').default,  
+        component: require('./components/modulos/dahsboard/Index').default,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from, next);
         }
-    },  
+    },
 
-    { 
-        path: '/pedido', 
+    {
+        path: '/pedido',
         name: 'pedido.index',
-        component: require('./components/modulos/pedido/index').default,    
-        beforeEnter: (to, from, next) => {                
+        component: require('./components/modulos/pedido/index').default,
+        beforeEnter: (to, from, next) => {
             verificarAcceso(to, from, next);
         }
-    },  
+    },
 
-    { 
-        path: '/pedido/crear', 
+    {
+        path: '/pedido/crear',
         name: 'pedido.crear',
-        component: require('./components/modulos/pedido/Create').default,            
-    },      
+        component: require('./components/modulos/pedido/Create').default,
+    },
 
-    // { 
-    //     path: '/categoria', 
+    // {
+    //     path: '/categoria',
     //     name: 'categoria.index',
-    //     component: require('./components/modulos/categoria/index').default,            
-    // },  
-
-    // { 
-    //     path: '/producto', 
-    //     name: 'producto.index',
-    //     component: require('./components/modulos/producto/index').default,            
-    // },  
-
-    // { 
-    //     path: '/usuario', 
-    //     name: 'usuario.Index',
-    //     component: require('./components/modulos/usuario/Index').default,            
-    // },  
-
-    // { 
-    //     path: '/usuario/crear', 
-    //     name: 'producto.crear',
-    //     component: require('./components/modulos/usuario/create').default,            
-    // },  
-
-    // { 
-    //     path: '/usuario/editar', 
-    //     name: 'producto.editar',
-    //     component: require('./components/modulos/usuario/Edit').default,            
-    // },  
-
-    // { 
-    //     path: '/usuario/ver/:id', 
-    //     name: 'producto.ver',
-    //     component: require('./components/modulos/usuario/View').default,            
-    // },  
-
-    // { 
-    //     path: '/usuario/permiso/:id', 
-    //     name: 'producto.permiso',
-    //     component: require('./components/modulos/usuario/Permission').default,            
-    // },  
-
-    // { 
-    //     path: '/rol', 
-    //     name: 'rol.index',
-    //     component: require('./components/modulos/rol/Index').default,            
-    // },  
-
-    // { 
-    //     path: '/rol/crear', 
-    //     name: 'rol.crear',
-    //     component: require('./components/modulos/rol/Create').default,            
-    // },  
-
-    // { 
-    //     path: '/rol/editar/:id', 
-    //     name: 'rol.editar',
-    //     component: require('./components/modulos/rol/Edit').default,            
-    // },  
-
-    // { 
-    //     path: '/permiso/crear', 
-    //     name: 'permiso.crear',
-    //     component: require('./components/modulos/permiso/Create').default,            
-    // },  
-
-    // { 
-    //     path: '/permiso/editar/:id', 
-    //     name: 'permiso.editar',
-    //     component: require('./components/modulos/permiso/Edit').default,            
+    //     component: require('./components/modulos/categoria/index').default,
     // },
-    
-    // { 
-    //     path: '/reporte', 
+
+    // {
+    //     path: '/producto',
+    //     name: 'producto.index',
+    //     component: require('./components/modulos/producto/index').default,
+    // },
+
+    // {
+    //     path: '/usuario',
+    //     name: 'usuario.Index',
+    //     component: require('./components/modulos/usuario/Index').default,
+    // },
+
+    // {
+    //     path: '/usuario/crear',
+    //     name: 'producto.crear',
+    //     component: require('./components/modulos/usuario/create').default,
+    // },
+
+    // {
+    //     path: '/usuario/editar',
+    //     name: 'producto.editar',
+    //     component: require('./components/modulos/usuario/Edit').default,
+    // },
+
+    // {
+    //     path: '/usuario/ver/:id',
+    //     name: 'producto.ver',
+    //     component: require('./components/modulos/usuario/View').default,
+    // },
+
+    // {
+    //     path: '/usuario/permiso/:id',
+    //     name: 'producto.permiso',
+    //     component: require('./components/modulos/usuario/Permission').default,
+    // },
+
+    // {
+    //     path: '/rol',
+    //     name: 'rol.index',
+    //     component: require('./components/modulos/rol/Index').default,
+    // },
+
+    // {
+    //     path: '/rol/crear',
+    //     name: 'rol.crear',
+    //     component: require('./components/modulos/rol/Create').default,
+    // },
+
+    // {
+    //     path: '/rol/editar/:id',
+    //     name: 'rol.editar',
+    //     component: require('./components/modulos/rol/Edit').default,
+    // },
+
+    // {
+    //     path: '/permiso/crear',
+    //     name: 'permiso.crear',
+    //     component: require('./components/modulos/permiso/Create').default,
+    // },
+
+    // {
+    //     path: '/permiso/editar/:id',
+    //     name: 'permiso.editar',
+    //     component: require('./components/modulos/permiso/Edit').default,
+    // },
+
+    // {
+    //     path: '/reporte',
     //     name: 'reporte.index',
-    //     component: require('./components/modulos/reporte/Index').default,            
-    // },  
+    //     component: require('./components/modulos/reporte/Index').default,
+    // },
 
 
     // { path: '/', component: require('./components/modulos/dahsboard/Index').default },
     // { path: '/pedido', component: require('./components/modulos/pedido/Index').default },
-    { 
-        path: '/cliente', 
+    {
+        path: '/cliente',
         name: 'cliente.index',
         component: require('./components/modulos/cliente/Index').default,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from, next);
-        }            
+        }
     },
-    { 
-        path: '/categoria', 
+    {
+        path: '/cliente/crear',
+        name: 'cliente.crear',
+        component: require('./components/modulos/cliente/Create').default,
+        beforeEnter: (to, from, next) => {
+            verificarAcceso(to, from, next);
+        }
+    },
+    {
+        path: '/cliente/editar/:id',
+        name: 'cliente.editar',
+        component: require('./components/modulos/cliente/Edit').default,
+        props: true,
+        beforeEnter: (to, from, next) => {
+            verificarAcceso(to, from, next);
+        }
+    },
+
+
+    {
+        path: '/categoria',
         name: 'categoria.index',
         component: require('./components/modulos/categoria/Index').default,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from, next);
-        }            
+        }
     },
 
-    { 
-        path: '/categoria/crear', 
+    {
+        path: '/categoria/crear',
         name: 'categoria.crear',
         component: require('./components/modulos/categoria/Create').default,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from, next);
-        }            
+        }
     },
 
-    { 
-        path: '/categoria/editar/:id', 
+    {
+        path: '/categoria/editar/:id',
         name: 'categoria.editar',
         component: require('./components/modulos/categoria/Edit').default,
         props: true,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from, next);
-        }            
-    },    
+        }
+    },
 
-    { 
-        path: '/producto', 
+    {
+        path: '/producto',
         name: 'producto.index',
         component: require('./components/modulos/producto/Index').default,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from, next);
-        }            
+        }
     },
 
-    { 
-        path: '/producto/crear', 
+    {
+        path: '/producto/crear',
         name: 'producto.crear',
         component: require('./components/modulos/producto/Create').default,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from, next);
-        }            
-    },    
+        }
+    },
 
-    { 
-        path: '/producto/editar/:id', 
+    {
+        path: '/producto/editar/:id',
         name: 'producto.editar',
         component: require('./components/modulos/producto/Edit').default,
         props: true,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from, next);
-        }            
-    },      
+        }
+    },
 
-    { 
-        path: '/usuario', 
+    {
+        path: '/usuario',
         name: 'usuario.index',
         component: require('./components/modulos/usuario/Index').default,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from, next);
-        }            
+        }
     },
 
-    { 
-        path: '/usuario/crear', 
+    {
+        path: '/usuario/crear',
         name: 'usuario.crear',
         component: require('./components/modulos/usuario/create').default,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from, next);
-        }            
+        }
     },
 
-    { 
-        path: '/usuario/editar/:id', 
+    {
+        path: '/usuario/editar/:id',
         name: 'usuario.editar',
         component: require('./components/modulos/usuario/Edit').default,
         props: true,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from, next);
-        }            
+        }
     },
 
-    { 
-        path: '/usuario/ver/:id', 
+    {
+        path: '/usuario/ver/:id',
         name: 'usuario.ver',
         component: require('./components/modulos/usuario/View').default,
         props: true,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from, next);
-        }            
+        }
     },
 
-    { 
-        path: '/usuario/permiso/:id', 
+    {
+        path: '/usuario/permiso/:id',
         name: 'usuario.permiso',
         component: require('./components/modulos/usuario/Permission').default,
         props: true,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from, next);
-        }            
+        }
     },
 
 
 
-    { 
-        path: '/rol', 
+    {
+        path: '/rol',
         name: 'rol.index',
         component: require('./components/modulos/rol/Index').default,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from, next);
-        }            
+        }
     },
 
-    { 
-        path: '/rol/crear', 
+    {
+        path: '/rol/crear',
         name: 'rol.crear',
         component: require('./components/modulos/rol/Create').default,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from, next);
-        }            
+        }
     },
 
-    { 
-        path: '/rol/editar/:id', 
+    {
+        path: '/rol/editar/:id',
         name: 'rol.editar',
         component: require('./components/modulos/rol/Edit').default,
         props: true,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from, next);
-        }            
-    },        
+        }
+    },
 
-    { 
-        path: '/permiso', 
+    {
+        path: '/permiso',
         name: 'permiso.index',
         component: require('./components/modulos/permiso/Index').default,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from, next);
-        }            
+        }
     },
 
-    { 
-        path: '/permiso/crear', 
+    {
+        path: '/permiso/crear',
         name: 'permiso.crear',
-        component: require('./components/modulos/permiso/Create').default 
+        component: require('./components/modulos/permiso/Create').default
     },
-    
-    { 
-        path: '/permiso/editar/:id', 
+
+    {
+        path: '/permiso/editar/:id',
         name: 'permiso.editar',
         component: require('./components/modulos/permiso/Edit').default,
         props: true,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from, next);
-        }            
+        }
     },
 
-    { 
-        path: '/reporte', 
+    {
+        path: '/reporte',
         name: 'reporte.pedido.index',
         component: require('./components/modulos/reporte/Index').default,
         beforeEnter: (to, from, next) => {
             verificarAcceso(to, from, next);
-        }            
-    },      
+        }
+    },
 
-    { 
-        path: '*', 
-        component: require('./components/plantilla/404').default        
-    },       
+    {
+        path: '*',
+        component: require('./components/plantilla/404').default
+    },
 ];
 
 export default new Router({
     routes: rutas,
     mode: 'history',
     linkActiveClass: 'active'
-})      
+})

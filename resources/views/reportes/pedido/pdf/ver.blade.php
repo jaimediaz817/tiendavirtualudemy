@@ -48,7 +48,7 @@
                     <table width="100%"  cellspacing="1" border="0" align="center">
                         <tr>
                             <td>
-                                {{-- <img src="#" alt="Texto alternativo" class="logo" width="210" height="90"> --}}
+                                <img src="{{ $logo }}" alt="Texto alternativo" class="logo" width="210" height="90">
                             </td>
                         </tr>
                         <tr>
@@ -63,20 +63,20 @@
                     <table width="100%" cellspacing="0" cellspacing="1" border="0" align="center">
                         <tr>
                             <td>#Pedido</td>
-                            <td>20205295</td>
+                            <td>{{ $respuesta[0]->nNumeroPedido }}</td>
                         </tr>
                         <tr>
                             <td>Fecha pedido</td>
-                            <td>2019/05/29</td>
+                            <td>{{ $respuesta[0]->dFechaPedido }}</td>
                         </tr>
                         <tr>
                             <td>Estado del Pedido</td>
-                            <td>Activo</td>
+                            <td>{{ $respuesta[0]->cEstadoPedido }}</td>
                         </tr>
                         <tr>
                             <td>Vnededor</td>
-                            <td>Juan Angel Bernal</td>
-                        </tr>                        
+                            <td>{{ $respuesta[0]->cVendedor }}</td>
+                        </tr>
                     </table>
                 </td>
             </tr>
@@ -87,23 +87,24 @@
             <tr>
                 <td colspan="2">
                     <h3><strong>Información del Cliente</strong></h3>
-                </td>                            
+                </td>
             </tr>
             <tr>
                 <td>Cliente</td>
-                <td>Graciela CR</td>
+                <td>{{ $respuesta[0]->cCliente }}</td>
             </tr>
             <tr>
                 <td>Documento</td>
-                <td>1094886452</td>
+                <td>{{ $respuesta[0]->cDocumento }}</td>
             </tr>
             <tr>
                 <td>Teléfono</td>
-                <td>9999999999</td>
-            </tr>  
+                <td>{{ $respuesta[0]->cTelefono }}</td>
+            </tr>
         </table>
 
         {{-- Descripcion de los productos --}}
+        @if (count($respuesta2) > 0)
         <table width="100%" cellspacing="0" cellspacing="1" border="1" align="center">
             <thead style="background-color: lightgray;">
                 <tr align="center" align="middle">
@@ -121,34 +122,39 @@
                 </tr>
             </thead>
             <tbody>
+                @foreach($respuesta2 as $key => $value)
                 <tr>
-                    <td align="center"><span>1</span></td>
-                    <td align="center"><span>Manzana</span></td>
-                    <td align="center"><span>5</span></td>
-                    <td align="center"><span>2.5</span></td>
-                    <td align="center"><span>11</span></td>
+                    <td align="center"><span>{{ $key + 1 }}</span></td>
+                    <td align="center"><span>{{ $value->cProducto }}</span></td>
+                    <td align="center"><span>{{ $value->nCantidad }}</span></td>
+                    <td align="center"><span>{{ number_format($value->fPrecio, 2) }}</span></td>
+                    <td align="center"><span>{{ number_format($value->fSubTotal, 2) }}</span></td>
                 </tr>
+                @endforeach
             </tbody>
-        </table>        
+        </table>
+        @endif
 
         {{-- Seccion para el total y comentarios --}}
         <table width="100%" cellspacing="0" cellspacing="1" border="0" align="center">
             <tr>
                 <td align="right"><h3><strong>Total del Pedido</strong></h3></td>
                 <td align="center">
-                    <h3>26</h3>
+                    <h3>{{ number_format($respuesta[0]->fTotalPedido, 2) }}</h3>
                 </td>
             </tr>
         </table>
 
+        @if (!empty($respuesta[0]->cComentario))
         <table width="100%" cellspacing="0" cellspacing="1" border="1" align="center">
             <tr>
                 <td><h3><strong>Comentarios adicionales</strong></h3></td>
                 <td>
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sed dolores id quaerat labore numquam nostrum quis magni aliquam sint aut asperiores debitis, optio ullam unde veritatis nulla minima alias similique?
+                    {{ $respuesta[0]->cComentario }}
                 </td>
             </tr>
         </table>
+        @endif
 
     </div>
 </body>

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -23,10 +23,10 @@ class LoginController extends Controller
 
     // TODO: implementaciones propias:
 
-    public function login(Request $request) 
+    public function login(Request $request)
     {
         $cEmail      =   $request->cEmail;
-        $cContrasena =   $request->cContrasena; 
+        $cContrasena =   $request->cContrasena;
 
         $respuesta = Auth::attempt(['email' => $cEmail, 'password' => $cContrasena, 'state' => 'A' ]);
 
@@ -37,12 +37,13 @@ class LoginController extends Controller
             ]);
         } else {
             return response()->json([
-                'code'     => 401
+                'code'     => 401,
+                'pass'     => Hash::make("1234567890")
             ]);
         }
     }
 
-    public function logout(Request $request) 
+    public function logout(Request $request)
     {
         Auth::logout();
 

@@ -16,10 +16,22 @@ class CustomersController extends Controller
             return redirect('/');
         }
 
-        // Mecanismo procedimiento almacenado
-        $respuesta  =   DB::select('call sp_Cliente_getListarClientes ()');
+        $nIdCliente     =   $request->nIdCliente;
+        $cDocumento     =   $request->cDocumento;
+        $cNombre        =   $request->cNombre;
 
-        return $respuesta;
+        $nIdCliente     =   ($nIdCliente   == NULL) ? ($nIdCliente  =   0) : $nIdCliente;
+        $cNombre        =   ($cNombre      == NULL) ? ($cNombre     =  '') : $cNombre;
+        $cDocumento     =   ($cDocumento   == NULL) ? ($cDocumento  =  '') : $cDocumento;
+
+        // Mecanismo procedimiento almacenado
+        $respuesta  =   DB::select('call sp_Cliente_getListarClientes (?, ?, ?)', [
+            $nIdCliente,
+            $cNombre,
+            $cDocumento
+        ]);
+
+        return json_encode($respuesta);
     }
 
     public function setRegistrarCliente(Request $request)
@@ -29,17 +41,17 @@ class CustomersController extends Controller
         }
 
         $cDocumento     =   $request->cDocumento;
-        $cNombre        =   $request->cNombre;        
-        $cApellido      =   $request->cApellido;        
+        $cNombre        =   $request->cNombre;
+        $cApellido      =   $request->cApellido;
         $cCorreo        =   $request->cCorreo;
-        $cTelefono      =   $request->cTelefono;      
-        $nIdAuthUser    =   Auth::id();  
-        
+        $cTelefono      =   $request->cTelefono;
+        $nIdAuthUser    =   Auth::id();
+
         $cNombre        =   ($cNombre      == NULL) ? ($cNombre     =  '') : $cNombre;
         $cDocumento     =   ($cDocumento   == NULL) ? ($cDocumento  =  '') : $cDocumento;
         $cApellido      =   ($cApellido    == NULL) ? ($cApellido   =  '') : $cApellido;
-        $cCorreo        =   ($cCorreo      == NULL) ? ($cCorreo     =  '') : $cCorreo;        
-        $cTelefono      =   ($cTelefono    == NULL) ? ($cTelefono   =  '') : $cTelefono;      
+        $cCorreo        =   ($cCorreo      == NULL) ? ($cCorreo     =  '') : $cCorreo;
+        $cTelefono      =   ($cTelefono    == NULL) ? ($cTelefono   =  '') : $cTelefono;
 
 
         // Mecanismo procedimiento almacenado
@@ -48,6 +60,43 @@ class CustomersController extends Controller
             $cNombre,
             $cApellido,
             $cCorreo,
+            $cTelefono,
+            $nIdAuthUser
+        ]);
+
+        return $respuesta;
+    }
+
+    public function setEditarCliente(Request $request)
+    {
+        if (!$request->ajax()) {
+            return redirect('/');
+        }
+
+        $nIdCliente    =   $request->nIdCliente;
+        $nIdCliente    =   ($nIdCliente == NULL) ? ($nIdCliente = '') : $nIdCliente;
+
+        $cDocumento     =   $request->cDocumento;
+        $cNombre        =   $request->cNombre;
+        $cApellido      =   $request->cApellido;
+        $cEmail         =   $request->cEmail;
+        $cTelefono      =   $request->cTelefono;
+        $nIdAuthUser    =   Auth::id();
+
+        $cNombre        =   ($cNombre      == NULL) ? ($cNombre     =  '') : $cNombre;
+        $cDocumento     =   ($cDocumento   == NULL) ? ($cDocumento  =  '') : $cDocumento;
+        $cApellido      =   ($cApellido    == NULL) ? ($cApellido   =  '') : $cApellido;
+        $cEmail         =   ($cEmail       == NULL) ? ($cEmail      =  '') : $cEmail;
+        $cTelefono      =   ($cTelefono    == NULL) ? ($cTelefono   =  '') : $cTelefono;
+
+
+        // Mecanismo procedimiento almacenado
+        $respuesta  =   DB::select('call sp_Cliente_setEditarCliente (?, ?, ?, ?, ?, ?, ?)', [
+            $nIdCliente,
+            $cDocumento,
+            $cNombre,
+            $cApellido,
+            $cEmail,
             $cTelefono,
             $nIdAuthUser
         ]);

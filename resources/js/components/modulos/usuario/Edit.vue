@@ -412,7 +412,7 @@ export default {
                 'cPrimerNombre'     : this.fillEditarUsuario.cPrimerNombre,
                 'cSegundoNombre'    : this.fillEditarUsuario.cSegundoNombre,
                 'cApellido'         : this.fillEditarUsuario.cApellido,
-                'cUsuario'         : this.fillEditarUsuario.cUsuario,
+                'cUsuario'          : this.fillEditarUsuario.cUsuario,
                 'cCorreo'           : this.fillEditarUsuario.cCorreo,
                 'cContrasena'       : this.fillEditarUsuario.cContrasena,
                 'oFotografia'       : nIdFile
@@ -421,13 +421,46 @@ export default {
                 this.setEditarRolByUsuario();
                 this.fullscreenLoading = false;   
                 // position: 'top-end',
-                
+
+                if (nIdFile  != 0) {
+                    this.getRefrescarUsuarioAutenticado();   
+                } else {
+                    Swal.fire({                    
+                        icon: 'success',
+                        title: 'Se actualizó el usuario correctamente',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })  
+                }                
+                       
+            }).catch(error => {
+                console.log("error::::")
+                if (error.response.status == 401) {
+                    this.$router.push({name: 'login'})
+                    location.reload();
+                    sessionStorage.clear();
+                    this.fullscreenLoading = false;
+                }
+            })
+        },        
+
+        getRefrescarUsuarioAutenticado() {
+            var url = '/authenticate/getRefrescarUsuarioAutenticado';
+
+            axios.get(url).then(response =>{                
+                console.log("### VIEW ### : ", response.data);
+
+                EventBus.$emit('verifyAuthenticatedUser', response.data);
+
+                this.fullscreenLoading = false;   
+                this.getUsuarioById();
+
                 Swal.fire({                    
                     icon: 'success',
                     title: 'Se actualizó el usuario correctamente',
                     showConfirmButton: false,
                     timer: 1500
-                })         
+                });
             }).catch(error => {
                 console.log("error::::")
                 if (error.response.status == 401) {

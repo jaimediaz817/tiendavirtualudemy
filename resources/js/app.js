@@ -9,17 +9,21 @@ require('./bootstrap');
 window.Vue = require('vue');
 
 // TODO: componentes
+
+/**
+ * ELEMENT - UI - biblioteca para interfaz de usuario
+ */
 //import Vue from 'vue';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 // Importando el idioma de Element:
 import locale from 'element-ui/lib/locale/lang/en'
 
-
 // TODO: para usarse globalmente anteponemos el nodo window:
 // Fixed:
 // #1 se agrega el idioma de elemento UI por defecto
 window.Vue.use(ElementUI, { locale });
+
 
 
 /**
@@ -31,9 +35,6 @@ Vue.use(Vuesax, {
   // options here
 })
 
-/**
- * Mixins Globales
- */
 
 
 

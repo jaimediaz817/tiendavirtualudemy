@@ -17,7 +17,7 @@
                 <div class="image">
                     <template v-if="!usuario.file_id">
                         <img 
-                            :src="ruta + '/img/avatar.png'"
+                            src="ruta + '/img/avatar.png'"
                             class="img-circle elevation-2"
                             :alt="usuario.fullname"
                         >
@@ -30,7 +30,6 @@
                             style="height: 34px !important;"
                         >                        
                     </template>
-
                 </div>
 
                 <div class="info">
