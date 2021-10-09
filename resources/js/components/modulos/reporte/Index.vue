@@ -73,7 +73,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group row">
                                             <label class="col-md-3 col-form-label">Rango de fechas</label>
-                                            <div class="col-md-9">                                            
+                                            <div class="col-md-9">
                                                 <el-date-picker
                                                     v-model="fillBusquedaPedido.dFechaRango"
                                                     type="daterange"
@@ -106,14 +106,14 @@
                     <!-- Resultados -->
                     <div class="card card-info">
                         <div class="card-header">
-                            <template v-if="listPedidos.length">                                
-                                <el-tooltip 
-                                    class="item" 
-                                    effect="dark" 
+                            <template v-if="listPedidos.length">
+                                <el-tooltip
+                                    class="item"
+                                    effect="dark"
                                     content="Exportar en Formato EXCEL"
-                                    placement="right"                                    
+                                    placement="right"
                                 >
-                                    <i 
+                                    <i
                                         class="fas fa-file-excel"
                                         @click.prevent="setGenerarDocumento"
                                     ></i>
@@ -326,15 +326,16 @@ export default {
             var url = '/reporte/pedido/export';
 
             // Configurando data-type
-            var config = {
-                responseType: 'blob'
-            };
+            // var config = {
+            //     responseType: 'blob'
+            // };
 
             axios.get(url, {
+                responseType: 'blob',
                 params: {
-                    'listPedidos' : this.listPedidos
+                    'listPedidos' : JSON.stringify(this.listPedidos)
                 }
-            }, config)
+            })
             .then( response => {
                 console.log(response.data);
                 // Formatear respuesta a Blob - Javascript
@@ -343,7 +344,7 @@ export default {
                 // Renderizamos el Blob:
                 var url = document.createElement('a');
                 url.href = URL.createObjectURL(blobPdf);
-                url.download = 'usuarios.xlsx';
+                url.download = 'pedidos.xlsx';
                 url.click();
                 // window.open(url);
 

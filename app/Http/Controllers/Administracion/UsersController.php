@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Administracion;
 
+use App\Events\Logout;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\Request;
@@ -74,9 +75,9 @@ class UsersController extends Controller
         $respuesta  =   DB::select('call sp_Usuario_setRegistrarUsuario (?, ?, ?, ?, ?, ?, ?, ?)', [
             $cPrimerNombre,
             $cSegundoNombre,
-            $cApellido,                  
+            $cApellido,
             $cUsuario,
-            $cCorreo,      
+            $cCorreo,
             $cContrasena,
             $oFotografia,
             $nIdAuthUser
@@ -98,10 +99,10 @@ class UsersController extends Controller
         $cContrasena    = $request->cContrasena;
         $nIdAuthUser    = Auth::id();
 
-        if ($cContrasena != NULL) 
+        if ($cContrasena != NULL)
         {
             $cContrasena = Hash::make($cContrasena);
-        }        
+        }
 
         $oFotografia    = $request->oFotografia;
 
@@ -127,7 +128,7 @@ class UsersController extends Controller
             $cSegundoNombre,
             $cApellido,
             $cUsuario,
-            $cCorreo,      
+            $cCorreo,
             $cContrasena,
             $oFotografia,
             $nIdAuthUser
@@ -136,6 +137,9 @@ class UsersController extends Controller
         return $respuesta;
     }
 
+    /**
+     * Cambia el estado de un usuario dado en la aplicación
+     */
     public function setCambiarEstadoUsuario(Request $request)
     {
         if (!$request->ajax()) return redirect('/');
@@ -154,7 +158,14 @@ class UsersController extends Controller
             $nIdAuthUser
         ]);
 
-        return $respuesta;        
+        // validación
+        if ($cEstado == 'I')
+        {
+            // Llamado al evento
+            broadcast(new Logout($nIdUsuario));
+        }
+
+        return $respuesta;
     }
 
 
@@ -167,15 +178,15 @@ class UsersController extends Controller
         $nIdAuthUser    = Auth::id();
 
         $nIdUsuario     = ($nIdUsuario      == NULL) ? ($nIdUsuario         =   '') : $nIdUsuario;
-        $nIdRol         = ($nIdRol          == NULL) ? ($nIdRol             =   '') : $nIdRol;    
-        
+        $nIdRol         = ($nIdRol          == NULL) ? ($nIdRol             =   '') : $nIdRol;
+
         // Mecanismo procedimiento almacenado
         $respuesta  =     DB::select('call sp_Usuario_setEditarRolByUsuario (?, ?)', [
             $nIdUsuario,
             $nIdRol
         ]);
 
-        return $respuesta;        
+        return $respuesta;
     }
 
     public function getRolByUsuario(Request $request)
@@ -185,7 +196,7 @@ class UsersController extends Controller
         $nIdUsuario     = $request->nIdUsuario;
 
         $nIdUsuario     = ($nIdUsuario      == NULL) ? ($nIdUsuario         =   '') : $nIdUsuario;
-        
+
         // Mecanismo procedimiento almacenado
         $respuesta  =     DB::select('call sp_Usuario_getRolByUsuario (?)', [
             $nIdUsuario
@@ -200,7 +211,7 @@ class UsersController extends Controller
 
         $nIdUsuario     = $request->nIdUsuario;
         $nIdUsuario     = ($nIdUsuario      == NULL) ? ($nIdUsuario         =   '') : $nIdUsuario;
-        
+
 
         /**
          * Obtener los permisos que tiene ese rol  por usuario
@@ -220,7 +231,7 @@ class UsersController extends Controller
 
         $nIdUsuario  = $request->nIdUsuario;
         //$nIdUsuario  = ($nIdUsuario  == NULL) ? ($nIdUsuario   =   0) : $nIdUsuario;
-        
+
         if (!$nIdUsuario  || $nIdUsuario == NULL || $nIdUsuario == "") {
             $nIdUsuario =  Auth::id();
         }
@@ -232,7 +243,7 @@ class UsersController extends Controller
             $nIdUsuario
         ]);
 
-        return $respuesta;        
+        return $respuesta;
     }
 
     public function setRegistrarPermisosByUsuario(Request $request)
@@ -243,7 +254,7 @@ class UsersController extends Controller
         $nIdUsuario  = ($nIdUsuario  == NULL) ? ($nIdUsuario   =   0) : $nIdUsuario;
 
         //  Transacciones
-        try 
+        try
         {
             DB::beginTransaction();
 
@@ -255,8 +266,8 @@ class UsersController extends Controller
             $listPermisos       =       $request->listPermisosFilter;
             $listPermisosSize   =       sizeof($listPermisos);
 
-            if ($listPermisosSize > 0) 
-            {            
+            if ($listPermisosSize > 0)
+            {
                 foreach ($listPermisos as $key => $value)
                 {
                     if ($value['checked'] == true) {
@@ -268,7 +279,7 @@ class UsersController extends Controller
                     }
                 }
             }
-            
+
             DB::commit();
             $respuesta['success'] = true;
             return json_encode($respuesta);
@@ -285,8 +296,8 @@ class UsersController extends Controller
 
     /**
      * @param {Request} peticion
-     * 
-     * Funcion que permite obtener los permisos según el rol 
+     *
+     * Funcion que permite obtener los permisos según el rol
      * y el usuario autenticado
      */
     public function getListarRolPermisosByUsuario(Request $request)
@@ -300,7 +311,7 @@ class UsersController extends Controller
         }
 
         $nIdUsuario  = ($nIdUsuario  == NULL) ? ($nIdUsuario   =   0) : $nIdUsuario;
-        
+
         /**
          * Obtener los permisos que tiene ese rol  por usuario
          */
@@ -309,6 +320,6 @@ class UsersController extends Controller
             $nIdUsuario
         ]);
 
-        return $respuesta;             
+        return $respuesta;
     }
 }

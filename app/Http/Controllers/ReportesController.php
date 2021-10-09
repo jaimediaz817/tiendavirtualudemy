@@ -51,7 +51,10 @@ class ReportesController extends Controller
             return redirect('/');
         }
 
-        $listPedidos = $request->listPedidos;
+        $listPedidos = json_decode($request->listPedidos);
+
+        // var_dump($listPedidos);
+        // dd();
 
         return (new OrdersExport)->getPedidos($listPedidos)->download('pedidos.xlsx');
         // return Excel::download(new UsersExport, 'users.xlsx');

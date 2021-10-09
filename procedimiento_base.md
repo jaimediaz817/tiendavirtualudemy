@@ -479,3 +479,18 @@ npm install howler      crear clase para exportar:   php artisan make:export Use
 composer require mmatwebsite/excel     
 [LARAVEL EXCEL]vcb
 php
+
+
+
+[RESOLVER PROBLEMA CON VERSIÓN DE PHP]
+
+-CONPOSER.JSON AGREGAR:
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "platform-check": false
+    },
+
+php artisan config:cache
+composer dump-autoload

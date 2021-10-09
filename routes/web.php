@@ -93,7 +93,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Reporte pedidos
     Route::get('/reporte/pedido/getListarPedidos', 'ReportesController@getListarPedidos');
-    Route::get('/reporte/pedido/export', 'ReportesController@export');    
+    Route::get('/reporte/pedido/export', 'ReportesController@export');
 
 });
 

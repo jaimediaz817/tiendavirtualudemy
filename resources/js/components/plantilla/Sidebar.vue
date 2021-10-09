@@ -2,7 +2,7 @@
    <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
         <a href="#" class="brand-link">
-            <img 
+            <img
                 :src="ruta + '/img/adminLTELogo.png'"
                 alt="AdminLTE Logo"
                 class="brand-image img-circle elevation-3"
@@ -16,19 +16,19 @@
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="image">
                     <template v-if="!usuario.file_id">
-                        <img 
+                        <img
                             src="ruta + '/img/avatar.png'"
                             class="img-circle elevation-2"
                             :alt="usuario.fullname"
                         >
                     </template>
                     <template v-else>
-                        <img 
+                        <img
                             :src="usuario.file.path"
                             class="img-circle elevation-2"
                             :alt="usuario.fullname"
                             style="height: 34px !important;"
-                        >                        
+                        >
                     </template>
                 </div>
 
@@ -40,16 +40,16 @@
                     {{ usuario.fullname }}
                     </router-link>
                     <!-- <a href="#" class="d-block">{{ usuario.fullname }}</a> -->
-                </div>                
+                </div>
             </div>
- 
+
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="info">
                     <a class="d-block" @click="logout" v-loading.fullscreen.lock="fullscreenLoading">
                         <i class="fas fa-sign-out-alt"></i>
                         Cerrar sesión
                     </a>
-                </div>            
+                </div>
             </div>
 
             <!-- Sidebar Menu -->
@@ -61,9 +61,9 @@
                         <template v-if="listPermisos.includes('dashboard.index')">
                             <router-link :to="'/'"  class="nav-link active">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>Dashboard</p>   
+                                <p>Dashboard</p>
                             </router-link>
-                        </template>              
+                        </template>
                     </li>
 
                     <template v-if="listPermisos.includes('pedido.index') || listPermisos.includes('cliente.index')">
@@ -85,9 +85,9 @@
                                     <p>
                                         Clientes
                                     </p>
-                                </router-link>                            
+                                </router-link>
                             </template>
-                        </li>                        
+                        </li>
                     </template>
 
                     <template v-if="listPermisos.includes('categoria.index') || listPermisos.includes('producto.index')">
@@ -97,7 +97,7 @@
                                 <router-link class="nav-link" :to="'/categoria'">
                                     <i class="nav-icon fas fa-sitemap"></i>
                                     <p>Categorías</p>
-                                </router-link>                            
+                                </router-link>
                             </template>
                         </li>
 
@@ -106,48 +106,48 @@
                                 <router-link class="nav-link" :to="'/producto'">
                                     <i class="nav-icon fas fa-apple-alt"></i>
                                     <p>Productos</p>
-                                </router-link>                            
-                            </template>                        
+                                </router-link>
+                            </template>
                         </li>
                     </template>
 
-                    <template v-if="listPermisos.includes('usuario.index') || listPermisos.includes('rol.index') || listPermisos.includes('permiso.index')">   
+                    <template v-if="listPermisos.includes('usuario.index') || listPermisos.includes('rol.index') || listPermisos.includes('permiso.index')">
                         <li class="nav-header">ADMINISTRACIÓN</li>
                         <li class="nav-item">
                             <template v-if="listPermisos.includes('usuario.index')">
                                 <router-link class="nav-link" :to="'/usuario'">
                                     <i class="nav-icon fas fa-users"></i>
                                     <p>Usuarios</p>
-                                </router-link>                            
-                            </template>                        
+                                </router-link>
+                            </template>
                         </li>
                         <li class="nav-item">
                             <template v-if="listPermisos.includes('rol.index')">
                                 <router-link class="nav-link" :to="'/rol'">
                                     <i class="nav-icon fas fa-unlock-alt"></i>
                                     <p>Roles</p>
-                                </router-link>                            
-                            </template>                        
+                                </router-link>
+                            </template>
                         </li>
                         <li class="nav-item">
                             <template v-if="listPermisos.includes('permiso.index')">
                                 <router-link class="nav-link" :to="'/permiso'">
                                     <i class="nav-icon fas fa-key"></i>
                                     <p>Permisos</p>
-                                </router-link>                            
-                            </template>                        
+                                </router-link>
+                            </template>
                         </li>
                     </template>
 
-                    <template v-if="listPermisos.includes('reporte.pedido.index')">   
+                    <template v-if="listPermisos.includes('reporte.pedido.index')">
                         <li class="nav-header">REPORTES</li>
                         <li class="nav-item">
                             <template v-if="listPermisos.includes('reporte.pedido.index')">
                                 <router-link class="nav-link" :to="'/reporte'">
                                     <i class="nav-icon fas fa-file-export"></i>
                                     <p>Reporte</p>
-                                </router-link>                            
-                            </template>                        
+                                </router-link>
+                            </template>
                         </li>
                     </template>
                 </ul>
@@ -161,7 +161,13 @@
 <script>
 export default {
     props: ['ruta', 'usuario', 'listPermisos'],
-
+    mounted() {
+        Echo.private(`logout.user.${this.usuario.id}`)
+            .listen('Logout', (e)=> {
+                console.log("evento echo: ", e);
+                this.logout();
+            });
+    },
     data() {
         return {
             fullscreenLoading: false,
@@ -173,18 +179,18 @@ export default {
             var url = '/authenticate/logout';
 
             axios.post(url).then( response => {
-                if (response.data.code == 204) {                    
+                if (response.data.code == 204) {
                     this.$router.push({ name: 'login' });
                     location.reload();
                     sessionStorage.clear();
                     this.fullscreenLoading = false;
                 }
 
-                if (response.data.code == 419) {                    
+                if (response.data.code == 419) {
                     location.reload();
                     sessionStorage.clear();
                 }
-            }) 
+            })
         }
     },
 }
