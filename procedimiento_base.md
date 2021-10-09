@@ -462,3 +462,20 @@ app/mail/
 [CHART JS]
 -instalación:
 npm install chart.js --save
+
+[CHAT]
+npm install --save laravel-echo pusher-js
+npm install --save laravel-echo pusher-js
+
+[EN EL SERVIDOR]
+composer require pusher/pusher-php-server "~4.0"
+- Creamos un evento:
+  php artisan make:event NuevoMensajeChat
+
+php artisan config:cache
+
+[LIBRERÍA JS PARA ESCUCHAR AUDIOS]
+npm install howler      crear clase para exportar:   php artisan make:export UsersExport --model=User
+composer require mmatwebsite/excel     
+[LARAVEL EXCEL]vcb
+php

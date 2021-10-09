@@ -88,6 +88,12 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Chats
     Route::get('/chat/getListarContactos', 'ChatsController@getListarContactos');
+    Route::get('/chat/getListarConversaciones', 'ChatsController@getListarConversaciones');
+    Route::post('/chat/setRegistrarMensaje', 'ChatsController@setRegistrarMensaje');
+
+    // Reporte pedidos
+    Route::get('/reporte/pedido/getListarPedidos', 'ReportesController@getListarPedidos');
+    Route::get('/reporte/pedido/export', 'ReportesController@export');    
 
 });
 

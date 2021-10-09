@@ -29,7 +29,9 @@
                 <!-- CHAT  -->
                 <div class="card-body">
                     <div class="container-fluid">
-                        <Chat></Chat>
+                        <Chat
+                            :usuario="authUser"
+                        ></Chat>
                     </div>
                 </div>
                 <!--/ CHAT -->
@@ -49,11 +51,11 @@
         },
         data() {
             return {
-
+                authUser: JSON.parse(sessionStorage.getItem("authUser"))
             }
         },
         mounted() {
-
+            console.log("mounted user: ", this.authUser)
         },
         methods: {
 

@@ -1,16 +1,36 @@
 <template>
     <div class="direct-chat-contacts">
+        <div class="input-group search-contact">
+            <input
+                type="text"
+                class="form-control"
+                placeholder="Buscar Contacto"
+                v-model="cBuscarContacto"
+            >
+        </div>
         <ul class="contacts-list">
-            <li v-for="(item, index) in contactos" :key="index">
+            <li
+                v-for="(item, index) in filterContactos" :key="index"
+                @click.prevent="seleccionarContacto(index, item)"
+                :class="(selected == index) ? 'selected' : ''"
+            >
                 <a href="#">
-                    <img v-if="!item.profile_image" class="contacts-list-img" src="/img/user1-128x128.jpg" alt="User Avatar">
-                    <img v-else class="contacts-list-img" :src="item.profile_image" alt="User Avatar">
+                    <img v-if="!item.profile_imagen" class="contacts-list-img" src="/img/user1-128x128.jpg" alt="User Avatar">
+                    <img v-else class="contacts-list-img" :src="item.profile_imagen" alt="User Avatar">
                     <div class="contacts-list-info">
                         <span class="contacts-list-name">
                             {{ item.fullname }}
-                            <small class="contacts-list-date float-right">2/28/2015</small>
+                            <small class="contacts-list-date float-right cantidad-mensajes-sin-leer">{{ item.nNumeroMensajesNoLeidos }}</small>
                         </span>
-                        <span class="contacts-list-msg">How have you been? I was...</span>
+                        <span
+                            class="contacts-list-msg"
+                            v-if="typing.state == true && typing.usuario == item.id"
+                        >Está escribiendo...</span>
+
+                        <span
+                            class="contacts-list-msg"
+                            v-else
+                        >{{ !(item.cUltimoMensajeNoLeido) ? '' : item.cUltimoMensajeNoLeido.slice(0, 30) + '...' }}</span>
                     </div>
                     <!-- /.contacts-list-info -->
                 </a>
@@ -27,11 +47,71 @@
             contactos: {
                 type: Array,
                 default: []
+            },
+            typing: Object,
+        },
+        computed: {
+            filterContactos() {
+                return this.contactos.filter(contacto => {
+                    return (contacto.fullname.toLowerCase().indexOf(this.cBuscarContacto.toLowerCase()) != -1);
+                })
+            },
+        },
+        data() {
+            return {
+                selected: '',
+                cBuscarContacto: '',
+            }
+        },
+        methods: {
+            seleccionarContacto(index, item)
+            {
+                this.selected = index;
+                this.$emit('contacto', item);
+                this.cBuscarContacto = '';
             }
         }
     }
 </script>
 
 <style>
+    .selected {
+        background: #7FFFD466;
+    }
 
+    .contacts-list {
+        height: 276px!important;
+        overflow: auto!important;
+    }
+
+    .cantidad-mensajes-sin-leer {
+        background: #43828c;
+        color: #fff;
+        right: 11px;
+        top: 20px;
+        display: flex;
+        font-size: 12px;
+        font-weight: 700px;
+        min-width: 20px;
+        justify-content: center;
+        align-items: center;
+        line-height: 20px;
+        padding: 0 4px;
+        border-radius: 3px;
+        border: 1px solid;
+        text-align: center;
+        width: 28px;
+    }
+    .search-contact {
+        border: 1px solid #52897b;
+        padding: 2px;
+    }
+    .search-contact {
+        width: 100%;
+
+    }
+    .contacts-list-img {
+        height: 40px;
+        object-fit: cover;
+    }
 </style>

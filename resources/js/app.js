@@ -60,6 +60,12 @@ window.EventBus = EventBus;
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
+
+// TODO: add sound library
+import Howler from 'howler';
+window.Howler = Howler;
+
+
 Vue.component('App', require('./components/App.vue').default);
 
 // TODO: -jid- registrando un nuevo componente:
