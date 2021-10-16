@@ -17,8 +17,9 @@
                     <span
                         class="direct-chat-timestamp"
                         :class="(item.to == contacto.id) ? 'float-right' : 'float-left' "
-                        v-text="item.created_at"
-                    ></span>
+                    >
+                    {{ moment(item.created_at).format("dddd, MMMM Do YYYY, h:mm:ss a") }}
+                    </span>
                 </div>
                 <!-- /.direct-chat-infos -->
                 <img
@@ -82,7 +83,7 @@
         },
         data() {
             return {
-
+                moment: moment,
             }
         },
         watch: {

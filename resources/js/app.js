@@ -44,7 +44,7 @@ window.Swal = Swal;
 
 
 
-// TODO: agregar EventBus
+// TODO: agregar EventBus - comunicación entre componentes
 export const EventBus = new Vue();
 window.EventBus = EventBus;
 
@@ -61,10 +61,14 @@ window.EventBus = EventBus;
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 
-// TODO: add sound library
+// TODO: add sound library - reproducir audio desde el lado del FRONT
 import Howler from 'howler';
 window.Howler = Howler;
 
+// TODO: add moment
+import moment from 'moment';
+moment.locale('es');
+window.moment = moment;
 
 Vue.component('App', require('./components/App.vue').default);
 

@@ -1,6 +1,11 @@
 <template>
     <form action="#" method="post">
         <div class="input-group">
+            <button
+                @click="toogleDialogEmoji"
+                :readonly="(!contacto) ? true : false"
+                type="button"
+            >😃</button>
             <input
                 type="text"
                 name="message"
@@ -20,11 +25,24 @@
                 >Enviar</button>
             </span>
         </div>
+
+        <VEmojiPicker
+            v-show="showDialog"
+            :style="{ width: '440px', height: '200' }"
+            labelSearch="Search"
+            lang="pt-BR"
+            @select="onSelectEmoji"
+        />
+
     </form>
 </template>
 
 <script>
+    import { VEmojiPicker, emojisDefault, categoriesDefault } from "v-emoji-picker";
     export default {
+        components: {
+            VEmojiPicker
+        },
         props: {
             contacto: {
                 type: Object,
@@ -37,7 +55,9 @@
         },
         data() {
             return {
-                message: ''
+                message: '',
+                showDialog: false,
+
             }
         },
         methods: {
@@ -82,6 +102,24 @@
                         contacto: this.contacto.id,
                         typing:   true
                     })
+            },
+
+            onSelectEmoji(emoji) {
+                // this.valueInput += emoji.data;
+                console.log(emoji);
+                // Optional
+                // this.toogleDialogEmoji();
+                this.message += emoji.data;
+            },
+
+            toogleDialogEmoji() {
+
+                if ( !this.contacto ) {
+                    return
+                }
+
+                console.log("Toogle!");
+                this.showDialog = !this.showDialog;
             },
         }
     }

@@ -30,8 +30,10 @@
         "element-ui": "^2.13.2",
         "howler": "^2.2.3",
         "laravel-echo": "^1.11.2",
+        "moment": "^2.29.1",
         "pusher-js": "^7.0.3",
         "sweetalert2": "^9.17.1",
+        "v-emoji-picker": "^2.3.3",
         "vue-router": "^3.3.4",
         "vuesax": "^4.0.1-alpha.25"
     }

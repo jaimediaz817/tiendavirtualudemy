@@ -494,3 +494,17 @@ php
 
 php artisan config:cache
 composer dump-autoload
+
+
+[INTRODUCIR EMOJIS PICKER]
+-url 
+https://madewithvuejs.com/v-emoji-picker
+
+
+- Instalación vía NPM:
+npm i v-emoji-picker
+
+[SOLUCIÓN A PROBLEMAS DE CODIFICACIÓN PARA LOS EMOJI AL REGISTRAR EL MENSAJE]:
+
+ALTER DATABASE tiendavirtual CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+ALTER TABLE tiendavirtual.messages CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

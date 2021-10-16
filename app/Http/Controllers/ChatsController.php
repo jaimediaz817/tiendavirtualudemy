@@ -54,7 +54,10 @@ class ChatsController extends Controller
 
         $from    = Auth::id();
         $to      = $request->nIdContacto;
-        $message = $request->cMensaje;
+        $message = utf8_encode($request->cMensaje);
+
+        // echo "mensaje: $message";
+        // dd();
 
         // Mecanismo procedimiento almacenado
         $respuesta  =   DB::select('call sp_Chat_setRegistrarMensaje(?,?,?)', [
